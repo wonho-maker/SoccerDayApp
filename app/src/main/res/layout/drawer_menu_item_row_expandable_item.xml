@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal" android:layout_width="match_parent"
+    android:paddingTop="8dp"
+    android:paddingBottom="8dp"
+    android:background="@color/drawer_menu_background_color"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical|center"
+        android:id="@+id/drawer_menu_expandable_childIcon"
+        android:paddingLeft="36dp"
+        android:layout_weight="4"
+        android:src="@drawable/ic_favorite"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical"
+        android:paddingLeft="16dp"
+        android:layout_weight="2"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="메뉴 1"
+        android:id="@+id/drawer_menu_expandable_childText" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="4"
+        android:gravity="right">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="right"
+            android:id="@+id/drawer_menu_expandable_childFavorite"
+            android:paddingRight="16dp"
+            android:src="@drawable/ic_favorite_star_empty"/>
+    </LinearLayout>
+
+</LinearLayout>

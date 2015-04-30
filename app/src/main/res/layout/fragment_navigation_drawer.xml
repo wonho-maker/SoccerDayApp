@@ -1,0 +1,23 @@
+<LinearLayout
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".NavigationDrawerFragment">
+
+
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:choiceMode="singleChoice"
+        android:orientation="vertical"
+        android:id="@+id/drawer_menu_container_recycler"
+        android:divider="@android:color/transparent" android:dividerHeight="0dp"
+        android:background="@color/drawer_menu_background_color" >
+
+</android.support.v7.widget.RecyclerView>
+
+
+</LinearLayout>
