@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -35,6 +36,8 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
     private final Context context;
 
     public int settingIndex = 5;
+
+    public DrawerItemClickListener drawerItemClickListener;
 
     public DrawerMenuAdapter(List<DrawerListData> drawerListData, int openIndicatorIcon, int closeIndicatorIcon,
                              int icon_favorite_empty, int icon_favorite_fill, Context applicationContext) {
@@ -66,6 +69,7 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
         ImageView expandItemFavoriteImageView;
 
         MaterialRippleLayout testLayout;
+        //LinearLayout testLayoutForExpandChild;
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
@@ -85,6 +89,7 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
                     itemType = TYPE_ITEM;
                 }
                 else if(ViewType == TYPE_ITEM_EXPAND_GROUP){ //expand List group
+                    testLayout = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
                     titleTextView = (TextView) itemView.findViewById(R.id.drawer_menu_expandable_groupText);
                     iconImageView = (ImageView) itemView.findViewById(R.id.drawer_menu_expandable_groupIcon);
 
@@ -94,6 +99,8 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
                     itemType = TYPE_ITEM_EXPAND_GROUP;
                 }
                 else { //expand List child item
+                    testLayout = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
+
                     titleTextView = (TextView) itemView.findViewById(R.id.drawer_menu_expandable_childText);
                     iconImageView = (ImageView) itemView.findViewById(R.id.drawer_menu_expandable_childIcon);
 
@@ -151,8 +158,10 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         if(viewHolder.itemType == TYPE_ITEM) {                              // as the list view is going to be called after the header view so we decrement the
 
-            viewHolder.testLayout.setClickable(true);
-            viewHolder.testLayout.setOnClickListener(new TestLayoutClick(position));
+            //viewHolder.testLayout.setClickable(true);
+            if(!viewHolder.testLayout.hasOnClickListeners()) {
+                viewHolder.testLayout.setOnClickListener(new TestLayoutClick(position));
+            }
 
             DrawerListData item = drawerListData.get(position);
 
@@ -165,6 +174,10 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
 
         }
         else if(viewHolder.itemType == TYPE_ITEM_EXPAND_GROUP) {
+
+            if(!viewHolder.testLayout.hasOnClickListeners()) {
+                viewHolder.testLayout.setOnClickListener(new TestLayoutClick(position));
+            }
 
             DrawerListData item = drawerListData.get(position);
 
@@ -188,6 +201,10 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
 
         }
         else if(viewHolder.itemType == TYPE_ITEM_EXPAND_ITEM) {
+
+            if(!viewHolder.testLayout.hasOnClickListeners()) {
+                viewHolder.testLayout.setOnClickListener(new TestLayoutClick(position));
+            }
 
             DrawerListData item = drawerListData.get(position);
 
@@ -225,8 +242,9 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
         }
         else  {  //header
 
-            viewHolder.testLayout.setClickable(true);
-            viewHolder.testLayout.setOnClickListener(new TestLayoutClick(position));
+            if(!viewHolder.testLayout.hasOnClickListeners()) {
+                viewHolder.testLayout.setOnClickListener(new TestLayoutClick(position));
+            }
         }
     }
 
@@ -244,6 +262,9 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
         return position == 0;
     }
 
+    public void setDrawerItemClickListener(DrawerItemClickListener drawerItemClickListener) {
+        this.drawerItemClickListener = drawerItemClickListener;
+    }
 
     private class TestLayoutClick implements View.OnClickListener {
         int position;
@@ -254,7 +275,13 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
 
         @Override
         public void onClick(View v) {
+            drawerItemClickListener.drawerItemClick(position);
             Log.e("position", " "+position);
         }
+    }
+
+    public interface DrawerItemClickListener {
+
+        public void drawerItemClick(int position);
     }
 }

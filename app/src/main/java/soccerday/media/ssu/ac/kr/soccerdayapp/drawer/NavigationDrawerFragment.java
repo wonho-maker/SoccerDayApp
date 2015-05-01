@@ -43,7 +43,7 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.drawer.DrawerListData;
  * See the <a href="https://developer.android.com/design/patterns/navigation-drawer.html#Interaction">
  * design guidelines</a> for a complete explanation of the behaviors implemented here.
  */
-public class NavigationDrawerFragment extends Fragment {
+public class NavigationDrawerFragment extends Fragment implements DrawerMenuAdapter.DrawerItemClickListener {
 
     /**
      * Remember the position of the selected item.
@@ -100,7 +100,7 @@ public class NavigationDrawerFragment extends Fragment {
         }
 
         // Select either the default item (0) or the last selected item.
-        //selectItem(mCurrentSelectedPosition);
+        selectItem(mCurrentSelectedPosition);
     }
 
     @Override
@@ -130,6 +130,8 @@ public class NavigationDrawerFragment extends Fragment {
                 R.drawable.ic_favorite_star_empty, R.drawable.ic_favorite_star_fill,
                 getActivity().getApplicationContext());
 
+
+        mDrawerMenuAdapter.setDrawerItemClickListener(this);
 
         mRecyclerView.setAdapter(mDrawerMenuAdapter);
 
@@ -376,6 +378,67 @@ public class NavigationDrawerFragment extends Fragment {
          * Called when an item in the navigation drawer is selected.
          */
         void onNavigationDrawerItemSelected(int position);
+    }
+
+    @Override
+    public void drawerItemClick(int position) {
+        if (position == 0) {  //header
+            selectItem(position);
+            // mDrawerLayout.closeDrawers();
+
+        } else if (position == 1) {    //schedule
+            //mDrawerLayout.closeDrawers();
+            selectItem(position);
+            mDrawerLayout.closeDrawers();
+
+        } else if (position == 2) {    //news
+            mDrawerLayout.closeDrawers();
+
+        } else if (position == 3) {    //ranks
+            mDrawerLayout.closeDrawers();
+
+        } else if (position == 4) {   //favorite
+            DrawerListData listData = drawerListData.get(position);
+
+            if (listData.isExpandListOpened()) {
+                listData.setExpandListOpened(false);
+
+                drawerListData.removeAll(listData.getExpandChildItemData());
+                mDrawerMenuAdapter.notifyItemChanged(position);
+                mDrawerMenuAdapter.notifyItemRangeRemoved(position + 1, listData.getExpandChildItemData().size());
+                mDrawerMenuAdapter.settingIndex -= listData.getExpandChildItemData().size();
+            } else {
+                listData.setExpandListOpened(true);
+
+                drawerListData.addAll(position + 1, listData.getExpandChildItemData());
+                mDrawerMenuAdapter.notifyItemChanged(position);
+                mDrawerMenuAdapter.notifyItemRangeInserted(position + 1, listData.getExpandChildItemData().size());
+                mDrawerMenuAdapter.settingIndex += listData.getExpandChildItemData().size();
+            }
+
+            //drawerMenuAdapter.add
+
+        } else if (position >= 5) {
+            if(mDrawerMenuAdapter.settingIndex == position) {
+                mDrawerLayout.closeDrawers();
+            }
+            else {
+                DrawerListData listData = drawerListData.get(position);
+                if(listData.isFavorite()) {
+                    listData.setFavorite(false);
+                    mDrawerMenuAdapter.notifyItemChanged(position);
+                }
+                else {
+                    listData.setFavorite((true));
+
+
+
+                    mDrawerMenuAdapter.notifyItemChanged(position);
+                }
+
+            }
+
+        }
     }
 
     private class DrawerMenuTouchListener implements RecyclerView.OnItemTouchListener {

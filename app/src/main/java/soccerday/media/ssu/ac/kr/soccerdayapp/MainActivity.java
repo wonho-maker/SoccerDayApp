@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v4.app.FragmentManager;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -15,6 +16,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.drawer.NavigationDrawerFragment;
+import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.ScheduleFragment;
 
 
 public class MainActivity extends ActionBarActivity
@@ -55,13 +57,32 @@ public class MainActivity extends ActionBarActivity
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
+        if(position == 0) {
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                    .commit();
+        }
+        else if(position == 1) {
+            ScheduleFragment scheduleFragment = (ScheduleFragment) fragmentManager.findFragmentByTag("scheduleFragment");
+            Log.i("fragments", fragmentManager.getFragments().toString());
+
+            if (scheduleFragment == null) {
+                Log.i("test", "position");
+                scheduleFragment = ScheduleFragment.newInstance(position);
+
+                fragmentManager.beginTransaction()
+                        .replace(R.id.container, scheduleFragment, "scheduleFragment")
+                        .commit();
+            }
+        }
     }
 
     public void onSectionAttached(int number) {
         switch (number) {
+            case 0:
+                mTitle = "0";
+                break;
             case 1:
                 mTitle = getString(R.string.title_section1);
                 break;
