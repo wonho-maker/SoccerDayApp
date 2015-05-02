@@ -3,9 +3,17 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:choiceMode="singleChoice"
+        android:orientation="vertical"
+        android:id="@+id/league_list_container_recycler"
+        android:divider="@android:color/transparent" android:dividerHeight="0dp"
+        android:background="@color/league_list_background_color"
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="League List"/>
+        >
+
+    </android.support.v7.widget.RecyclerView>
+
 </LinearLayout>

@@ -1,14 +1,12 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp.drawer;
 
 import android.content.Context;
-import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.balysv.materialripple.MaterialRippleLayout;
@@ -115,6 +113,8 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
         }
     }
 
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == TYPE_ITEM) {
@@ -190,7 +190,7 @@ public class DrawerMenuAdapter extends RecyclerView.Adapter<DrawerMenuAdapter.Vi
                 viewHolder.itemDividerView.setVisibility(View.VISIBLE);
             }
 
-            if(item.isHasIndicator()) {
+            if(item.hasIndicator()) {
                 if(item.isExpandListOpened()) {
                     viewHolder.expandIndicatorImageView.setImageResource(icon_Indicator_open);
                 }

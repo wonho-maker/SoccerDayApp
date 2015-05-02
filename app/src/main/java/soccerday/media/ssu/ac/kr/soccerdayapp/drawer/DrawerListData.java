@@ -144,7 +144,7 @@ public class DrawerListData {
         this.loadedIconFromURL = loadedIconFromURL;
     }
 
-    public boolean isHasIndicator() {
+    public boolean hasIndicator() {
         return hasIndicator;
     }
 
