@@ -12,13 +12,13 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LeagueListFragment;
  */
 public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
 
-    Fragment[] fragments = new Fragment[2];
+    Fragment[] fragments = new Fragment[1];
 
     public ScheduleViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
 
         fragments[0] = new LeagueListFragment();
-        fragments[1] = new LeagueListFragment();
+        //fragments[1] = new LeagueListFragment();
     }
 
     public Fragment[] getFragments() {

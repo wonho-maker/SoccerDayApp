@@ -1,6 +1,8 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp.fragments;
 
 import android.content.Context;
+import android.support.v7.widget.CardView;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,8 @@ import com.bumptech.glide.Glide;
 import java.util.List;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
+import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.MatchLinearLayoutManager;
+import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.MatchListAdapter;
 
 /**
  * Created by Wonho Lee on 2015-05-02.
@@ -80,11 +84,23 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
             }
         }
 
+        viewHolder.expandRecyclerView.setHasFixedSize(true);
+
+        viewHolder.expandRecyclerView.setLayoutManager(new MatchLinearLayoutManager(context, MatchLinearLayoutManager.VERTICAL, false));
+
+        viewHolder.expandRecyclerView.swapAdapter(new MatchListAdapter(context, item.getExpandChildItemData()), true);
+
+
+
+        //viewHolder.expandRecyclerView.getAdapter().notifyItemRangeInserted(0, item.getExpandChildItemData().size());
+
         if(position == 0) {
             viewHolder.topMargin.setVisibility(View.VISIBLE);
         } else if(position == getItemCount() - 1) {
             viewHolder.bottomMargin.setVisibility(View.VISIBLE);
         }
+
+        //viewHolder.testCardView.se
     }
 
     @Override
@@ -99,6 +115,9 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
 
         ImageView expandIndicatorImageView;
 
+        CardView testCardView;
+        RecyclerView expandRecyclerView;
+
         View topMargin;
         View bottomMargin;
 
@@ -109,6 +128,9 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
             iconImageView = (ImageView) itemView.findViewById(R.id.league_list_leagueIcon);
 
             expandIndicatorImageView = (ImageView) itemView.findViewById(R.id.league_list_leagueExpandIcon);
+
+            testCardView = (CardView) itemView.findViewById(R.id.league_list_card_view);
+            expandRecyclerView = (RecyclerView) itemView.findViewById(R.id.league_list_expand_schedule_recycler);
 
             topMargin = (View) itemView.findViewById(R.id.league_list_top_margin);
             bottomMargin = (View) itemView.findViewById(R.id.league_list_bottom_margin);
