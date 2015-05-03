@@ -5,7 +5,7 @@ package soccerday.media.ssu.ac.kr.soccerdayapp;
  */
 public class LeagueData {
 
-    public static String leageEmblemURL(String league) {
+    public static String getLeageEmblemURL(String league) {
 
         if(league.contains("세리에")) {
             return SerieA_URL;

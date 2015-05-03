@@ -2,6 +2,7 @@ package soccerday.media.ssu.ac.kr.soccerdayapp.fragments;
 
 import com.bumptech.glide.DrawableTypeRequest;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.MatchListData;
@@ -32,6 +33,7 @@ public class LeagueListData {
 
         this.hasIndicator = true;
 
+        expandChildItemData = new ArrayList<>();
     }
 
 
@@ -97,5 +99,14 @@ public class LeagueListData {
 
     public void setExpandListOpened(boolean isExpandListOpened) {
         this.isExpandListOpened = isExpandListOpened;
+    }
+
+    @Override
+    public String toString() {
+        return "LeagueListData{" +
+                "title='" + title + '\'' +
+                ", expandChildItemData=" + expandChildItemData +
+                ", iconURL='" + iconURL + '\'' +
+                '}';
     }
 }

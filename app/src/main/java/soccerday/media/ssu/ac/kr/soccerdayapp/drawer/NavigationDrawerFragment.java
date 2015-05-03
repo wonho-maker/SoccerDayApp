@@ -1,6 +1,5 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp.drawer;
 
-import android.graphics.Color;
 import android.support.v7.app.ActionBarActivity;
 import android.app.Activity;
 import android.support.v7.app.ActionBar;
@@ -14,7 +13,6 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -23,20 +21,14 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.Toast;
-
-import com.balysv.materialripple.MaterialRippleLayout;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.LeagueData;
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
-import soccerday.media.ssu.ac.kr.soccerdayapp.drawer.DrawerListData;
 
 /**
  * Fragment used for managing interactions for and presentation of a navigation drawer.
@@ -198,7 +190,7 @@ public class NavigationDrawerFragment extends Fragment implements DrawerMenuAdap
 
 
         for(int i = 0; i < leagueTitles.length; i++) {
-            DrawerListData tempChildData = new DrawerListData(leagueTitles[i], LeagueData.leageEmblemURL(leagueTitles[i]), DrawerMenuAdapter.TYPE_ITEM_EXPAND_ITEM);
+            DrawerListData tempChildData = new DrawerListData(leagueTitles[i], LeagueData.getLeageEmblemURL(leagueTitles[i]), DrawerMenuAdapter.TYPE_ITEM_EXPAND_ITEM);
 
             expandChildItems.add(tempChildData);
         }

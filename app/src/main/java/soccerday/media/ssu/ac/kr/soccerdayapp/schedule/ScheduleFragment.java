@@ -1,5 +1,6 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,17 +11,21 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.List;
+
 import it.neokree.materialtabs.MaterialTab;
 import it.neokree.materialtabs.MaterialTabHost;
 import it.neokree.materialtabs.MaterialTabListener;
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
+import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LeagueListData;
+import soccerday.media.ssu.ac.kr.soccerdayapp.parser.ScheduleParserTask;
 
 /**
  * Created by Wonho Lee on 2015-05-01.
  */
 public class ScheduleFragment extends Fragment implements MaterialTabListener {
 
-    private ProgressDialog taskProgressDia;
+
 
     MaterialTabHost mScheduleTabHost;
     ViewPager mScheduleViewPager;
@@ -28,7 +33,10 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
+
+
     }
 
     @Override
@@ -88,4 +96,8 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
     public void onTabUnselected(MaterialTab materialTab) {
 
     }
+
+
+
+
 }
