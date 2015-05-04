@@ -23,7 +23,7 @@
     card_view:cardCornerRadius="1dp"
     card_view:cardElevation="1dp"
     card_view:cardMaxElevation="1dp"
-    card_view:cardUseCompatPadding="true"
+    card_view:cardUseCompatPadding="false"
 
     android:layout_marginLeft="10dp"
     android:layout_marginRight="10dp"
@@ -36,8 +36,9 @@
         >
 
     <LinearLayout
+        android:id="@+id/league_list_top"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_gravity="center_vertical"
         android:orientation="horizontal"
         >
@@ -88,7 +89,7 @@
         android:id="@+id/league_list_expand_schedule_recycler"
         android:divider="@android:color/transparent" android:dividerHeight="0dp"
         android:background="#ffffff"
-
+        android:visibility="gone"
         />
 
     </LinearLayout>

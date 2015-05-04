@@ -79,14 +79,14 @@ public class LeagueListFragment extends Fragment {
 
     public void updateLeagueList(List<LeagueListData> leagueListData) {
 
-        mLeagueListData = leagueListData;
-
+        mLeagueListData.addAll(leagueListData);
+        mLigeaueListAdapter.setmLeagueListData(leagueListData);
         //Log.i("list" , mLeagueListData.toString());
-        mLigeaueListAdapter = new LigeaueListAdapter(mLeagueListData, R.drawable.ic_indicator_up, R.drawable.ic_indicator
-                , getActivity());
+        //mLigeaueListAdapter = new LigeaueListAdapter(mLeagueListData, R.drawable.ic_indicator_up, R.drawable.ic_indicator
+          //      , getActivity());
 
         //mRecyclerView.setAdapter(mLigeaueListAdapter);
-        mRecyclerView.swapAdapter(mLigeaueListAdapter, true);
+        mRecyclerView.getAdapter().notifyItemRangeInserted(0, leagueListData.size());
 
         //mLigeaueListAdapter.notifyItemRangeInserted(0, mLeagueListData.size());
     }
@@ -104,8 +104,9 @@ public class LeagueListFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<LeagueListData> leagueListData) {
-            taskProgressDia.dismiss();
+
             updateLeagueList(leagueListData);
+            taskProgressDia.dismiss();
             //Log.i("progress End", "end");
 
         }

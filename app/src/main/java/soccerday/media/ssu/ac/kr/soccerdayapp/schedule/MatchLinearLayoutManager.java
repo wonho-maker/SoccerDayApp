@@ -76,4 +76,6 @@ public class MatchLinearLayoutManager extends LinearLayoutManager {
             recycler.recycleView(view);
         }
     }
+
+
 }

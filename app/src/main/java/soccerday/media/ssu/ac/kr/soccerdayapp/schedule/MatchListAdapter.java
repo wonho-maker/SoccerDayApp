@@ -40,6 +40,18 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
         return vhItem;
     }
 
+    public void showAndHide(boolean show, List<MatchListData> temp) {
+        if(show) {
+            for (int i = 0; i < temp.size(); i++) {
+                mMatchListData.add(temp.get(i));
+            }
+        }
+        else {
+            mMatchListData.removeAll(temp);
+        }
+
+    }
+
     @Override
     public void onBindViewHolder(ViewHolder viewHolder, int position) {
         MatchListData item = mMatchListData.get(position);
@@ -87,5 +99,13 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
             awayTeamNameTextView = (TextView) itemView.findViewById(R.id.league_list_expand_awayTeam_name);
             awayTeamIconImageView = (ImageView) itemView.findViewById(R.id.league_list_expand_awayTeam_icon);
         }
+    }
+
+    public List<MatchListData> getmMatchListData() {
+        return mMatchListData;
+    }
+
+    public void setmMatchListData(List<MatchListData> mMatchListData) {
+        this.mMatchListData = mMatchListData;
     }
 }
