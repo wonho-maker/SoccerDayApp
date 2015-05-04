@@ -21,19 +21,19 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.MatchListData;
 /**
  * Created by wonho on 2015-05-03.
  */
-public class ScheduleParserTask extends AsyncTask<Void, Integer, List<LeagueListData>> {
+public class ScheduleParserTask extends AsyncTask<Calendar, Integer, List<LeagueListData>> {
 
 
 
     @Override
-    protected List<LeagueListData> doInBackground(Void... params) {
+    protected List<LeagueListData> doInBackground(Calendar... params) {
 
-        Calendar today = Calendar.getInstance();
+        Calendar date = params[0].getInstance();
 
-        String date = today.get(Calendar.YEAR) +"년 " + (today.get(Calendar.MONTH) + 1)+"월 "
-                    + today.get(Calendar.DAY_OF_MONTH)+ "일";
+        String dateString = date.get(Calendar.YEAR) +"년 " + (date.get(Calendar.MONTH) + 1)+"월 "
+                    + date.get(Calendar.DAY_OF_MONTH)+ "일";
 
-        URL url = ParserData.getScheduleURL(date);
+        URL url = ParserData.getScheduleURL(dateString);
 
         Log.i("url", url.toString());
         Source source = null;

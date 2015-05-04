@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.Calendar;
 import java.util.List;
 
 import it.neokree.materialtabs.MaterialTab;
@@ -47,9 +48,12 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
         mScheduleTabHost = (MaterialTabHost) scheduleFragmentView.findViewById(R.id.schedule_fragment_materialTabHost);
         mScheduleViewPager = (ViewPager) scheduleFragmentView.findViewById(R.id.schedule_fragment_pager);
 
-        mScheduleViewPagerAdapter = new ScheduleViewPagerAdapter(getChildFragmentManager());
+        Calendar today = Calendar.getInstance();
+
+        mScheduleViewPagerAdapter = new ScheduleViewPagerAdapter(getChildFragmentManager(), today);
 
         mScheduleViewPager.setAdapter(mScheduleViewPagerAdapter);
+
         mScheduleViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
             @Override
@@ -61,7 +65,7 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
         for (int i = 0; i < mScheduleViewPagerAdapter.getCount(); i++) {
             Log.i("tab", " "+i);
             mScheduleTabHost.addTab(
-                    mScheduleTabHost.newTab().setText("test" + i).setTabListener(this));
+                    mScheduleTabHost.newTab().setText(mScheduleViewPagerAdapter.getViewTitle(i)).setTabListener(this));
         }
         mScheduleTabHost.post(new Runnable() {
             @Override
@@ -70,7 +74,8 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
             }
         });
 
-
+        //mScheduleViewPager.setCurrentItem(1);
+        mScheduleTabHost.setSelectedNavigationItem(1);
 
         return scheduleFragmentView;
     }
@@ -84,7 +89,8 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
 
     @Override
     public void onTabSelected(MaterialTab materialTab) {
-        mScheduleViewPager.setCurrentItem(materialTab.getPosition());
+        if(materialTab.getPosition() == 1)
+            mScheduleViewPager.setCurrentItem(materialTab.getPosition());
     }
 
     @Override

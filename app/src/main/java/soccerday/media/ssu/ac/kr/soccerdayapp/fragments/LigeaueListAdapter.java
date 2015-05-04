@@ -106,9 +106,11 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
         //viewHolder.expandRecyclerView.setLayoutManager(new LinearLayoutManager(context));
         viewHolder.expandRecyclerView.setAdapter(new MatchListAdapter(context, viewHolder.matchListData));
 
+        viewHolder.expandRecyclerView.setVisibility(View.GONE);
+
         if(!viewHolder.testLinearLayoutView.hasOnClickListeners()) {
             viewHolder.testLinearLayoutView.setOnClickListener(new TestCardViewClick(viewHolder.matchListData,
-                    viewHolder.expandRecyclerView, viewHolder.cardView ,position));
+                    viewHolder.expandRecyclerView, viewHolder.cardView , position));
         }
 
         //viewHolder.expandRecyclerView.getAdapter().notifyItemRangeInserted(0, item.getExpandChildItemData().size());
@@ -121,6 +123,7 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
 
         //viewHolder.testCardView.se
     }
+
 
     @Override
     public int getItemCount() {
@@ -156,6 +159,7 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
             testLinearLayoutView = (LinearLayout) itemView.findViewById(R.id.league_list_top);
             expandRecyclerView = (RecyclerView) itemView.findViewById(R.id.league_list_expand_schedule_recycler);
 
+
             topMargin = (View) itemView.findViewById(R.id.league_list_top_margin);
             bottomMargin = (View) itemView.findViewById(R.id.league_list_bottom_margin);
 
@@ -173,6 +177,9 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
         RecyclerView tempRecyclerView;
         int position;
         boolean hide;
+        int childExpandHeight;
+        int start;
+
         public TestCardViewClick(int position) {
             this.hide = true;
         }
@@ -181,6 +188,8 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
             tempRecyclerView = expandRecyclerView;
             this.position = position;
             this.hide = true;
+            childExpandHeight = -1;
+            int start = -1;
         }
 
         public TestCardViewClick(List<MatchListData> matchListData, RecyclerView expandRecyclerView, int position) {
@@ -188,6 +197,8 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
             this.position = position;
             this.hide = true;
             this.matchListData = matchListData;
+            childExpandHeight = -1;
+            int start = -1;
         }
 
         public TestCardViewClick(List<MatchListData> matchListData, RecyclerView expandRecyclerView, CardView cardView, int position) {
@@ -196,7 +207,11 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
             this.hide = true;
             this.matchListData = matchListData;
             this.cardView = cardView;
+            childExpandHeight = -1;
+            int start = -1;
         }
+
+
 
         @Override
         public void onClick(View v) {
@@ -206,23 +221,45 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
 
             if(tempMData.size() > 0) {
                 if(hide) {
-                    Log.i("test", tempMData.toString());
+                    //Log.i("test", tempMData.toString());
                     //matchListData.addAll(tempMData);
 
                     //tempRecyclerView.getAdapter().notifyItemRangeInserted(0, tempMData.size());
 
                     //tempRecyclerView.getAdapter().notifyDataSetChanged();
 
-                    cardView.setMaxCardElevation(2);
-                    cardView.setCardElevation(3);
+                    //cardView.setMaxCardElevation(3);
+                    //cardView.setCardElevation(5);
 
-
-                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_down);
+                    if(start == -1) {
+                        start = cardView.getMeasuredHeight();
+                    }
 
                     tempRecyclerView.setVisibility(View.VISIBLE);
 
+                    if(childExpandHeight == -1) {
+                        tempRecyclerView.measure(cardView.getMeasuredWidth(), cardView.getMeasuredHeight());
 
-                    tempRecyclerView.startAnimation(animation);
+                        childExpandHeight = tempRecyclerView.getMeasuredHeight();
+                    }
+
+                    ValueAnimator animator =  ValueAnimator.ofInt( cardView.getMeasuredHeight(), cardView.getMeasuredHeight() + childExpandHeight);
+                    //Log.i("test", " "+start+", "+cardView.getMeasuredHeight()+", "+childExpandHeight+", "+tempRecyclerView.getMeasuredHeight() );
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+
+                        @Override
+                        public void onAnimationUpdate(final ValueAnimator valueAnimator) {
+                            int value = (Integer) valueAnimator.getAnimatedValue();
+
+                            ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
+                            layoutParams.height = value;
+
+                            cardView.setLayoutParams(layoutParams);
+                        }
+                    });
+
+                    animator.start();
+                    tempRecyclerView.animate().alpha(1.0f).alphaBy(0.0f).start();
 
 
                     hide = false;
@@ -232,28 +269,26 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
 
                     //tempRecyclerView.getAdapter().notifyDataSetChanged();
 
-                    cardView.setCardElevation(0);
+                    //cardView.setMaxCardElevation(2);
+                    //cardView.setCardElevation(4);
 
-
-
-                    Animation animation = AnimationUtils.loadAnimation(context, R.anim.slide_up);
-                    animation.setAnimationListener(new Animation.AnimationListener() {
-                        @Override
-                        public void onAnimationStart(Animation animation) {
-
-                        }
+                    ValueAnimator animator =  ValueAnimator.ofInt( cardView.getMeasuredHeight(), cardView.getMeasuredHeight() - tempRecyclerView.getMeasuredHeight());
+                    //Log.i("test", " "+start+", "+cardView.getMeasuredHeight()+", "+childExpandHeight+", "+tempRecyclerView.getMeasuredHeight() );
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
 
                         @Override
-                        public void onAnimationEnd(Animation animation) {
-                            tempRecyclerView.setVisibility(View.GONE);
-                        }
+                        public void onAnimationUpdate(final ValueAnimator valueAnimator) {
+                            int value = (Integer) valueAnimator.getAnimatedValue();
 
-                        @Override
-                        public void onAnimationRepeat(Animation animation) {
+                            ViewGroup.LayoutParams layoutParams = cardView.getLayoutParams();
+                            layoutParams.height = value;
 
+                            cardView.setLayoutParams(layoutParams);
                         }
                     });
-                    tempRecyclerView.startAnimation(animation);
+
+                    animator.start();
+                    tempRecyclerView.animate().alpha(1.0f).alphaBy(0.0f).start();
 
 
                     hide = true;

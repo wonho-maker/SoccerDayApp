@@ -10,8 +10,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.LeagueData;
@@ -27,9 +29,18 @@ public class LeagueListFragment extends Fragment {
     LigeaueListAdapter mLigeaueListAdapter;
     RecyclerView.LayoutManager mLayoutManager;
 
+    TextView noMatchTextView;
     List<LeagueListData> mLeagueListData;
 
     private ProgressDialog taskProgressDia;
+
+    Calendar date;
+
+    public LeagueListFragment() {
+        super();
+    }
+
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,6 +58,8 @@ public class LeagueListFragment extends Fragment {
         View leagueListFragmentView = (View)inflater.inflate(R.layout.fragment_league_list, container, false);
 
         mRecyclerView = (RecyclerView)leagueListFragmentView.findViewById(R.id.league_list_container_recycler);
+
+        noMatchTextView = (TextView) leagueListFragmentView.findViewById(R.id.league_list_container_no_match_text);
 
         mRecyclerView.setHasFixedSize(true);
 
@@ -72,22 +85,34 @@ public class LeagueListFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        new ScheduleTask().execute();
+        new ScheduleTask().execute(date);
 
         return leagueListFragmentView;
     }
 
+    public void setDateAndExcuteTask(Calendar date) {
+        this.date = date;
+        //new ScheduleTask().execute(date);
+    }
+
     public void updateLeagueList(List<LeagueListData> leagueListData) {
 
-        mLeagueListData.addAll(leagueListData);
-        mLigeaueListAdapter.setmLeagueListData(leagueListData);
-        //Log.i("list" , mLeagueListData.toString());
-        //mLigeaueListAdapter = new LigeaueListAdapter(mLeagueListData, R.drawable.ic_indicator_up, R.drawable.ic_indicator
-          //      , getActivity());
 
-        //mRecyclerView.setAdapter(mLigeaueListAdapter);
-        mRecyclerView.getAdapter().notifyItemRangeInserted(0, leagueListData.size());
 
+        if(leagueListData.size() == 0) {
+            noMatchTextView.setVisibility(View.VISIBLE);
+        } else {
+            noMatchTextView.setVisibility(View.GONE);
+
+            mLeagueListData.addAll(leagueListData);
+            mLigeaueListAdapter.setmLeagueListData(leagueListData);
+            //Log.i("list" , mLeagueListData.toString());
+            //mLigeaueListAdapter = new LigeaueListAdapter(mLeagueListData, R.drawable.ic_indicator_up, R.drawable.ic_indicator
+            //      , getActivity());
+
+            //mRecyclerView.setAdapter(mLigeaueListAdapter);
+            mRecyclerView.getAdapter().notifyItemRangeInserted(0, leagueListData.size());
+        }
         //mLigeaueListAdapter.notifyItemRangeInserted(0, mLeagueListData.size());
     }
 

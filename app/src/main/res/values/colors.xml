@@ -3,5 +3,5 @@
     <color name="drawer_menu_background_color">#ffffff</color>
     <color name="drawer_menu_item_divider">#67a0a0a0</color>
     <color name="primary">#ffffffff</color>
-    <color name="league_list_background_color">#67a0a0a0</color>
+    <color name="league_list_background_color">#67bababa</color>
 </resources>
