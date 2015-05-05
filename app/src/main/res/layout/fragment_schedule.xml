@@ -13,7 +13,7 @@
         android:layout_height="38dp"
         app:textColor="#FFFFFF"
         app:primaryColor="#ff34aba2"
-        app:accentColor="#ffff0000" />
+        app:accentColor="@android:color/transparent" />
 
 
 
