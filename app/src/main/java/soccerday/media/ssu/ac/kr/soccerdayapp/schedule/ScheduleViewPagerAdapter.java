@@ -3,10 +3,12 @@ package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.util.Log;
 
 import java.util.Calendar;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.MainActivity;
+import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LeagueListDummyFragment;
 import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LeagueListFragment;
 
 /**
@@ -14,8 +16,9 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LeagueListFragment;
  */
 public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
 
-    LeagueListFragment[] fragments = new LeagueListFragment[1];
+    Fragment[] fragments = new Fragment[3];
     String[] viewTitle = new String[3];
+    Calendar date;
 
     public ScheduleViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -27,9 +30,13 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
     public ScheduleViewPagerAdapter(FragmentManager childFragmentManager, Calendar date) {
         super(childFragmentManager);
 
-        fragments[0] = new LeagueListFragment();
+        this.date = date;
+        fragments[0] = new LeagueListDummyFragment();
+        fragments[1] = LeagueListFragment.newInstance(date);
+        fragments[2] = new LeagueListDummyFragment();
 
-        viewTitle[1] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
+
+
 
         date.add(Calendar.DAY_OF_WEEK, -1);
         viewTitle[0] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
@@ -37,7 +44,10 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
         date.add(Calendar.DAY_OF_WEEK, 2);
         viewTitle[2] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
 
+        date.add(Calendar.DAY_OF_WEEK, -1);
+        viewTitle[1] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
 
+        //Log.i("loading"," logdijf");
     }
 
     public String getViewTitle(int index) {
@@ -48,7 +58,7 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
         return fragments;
     }
 
-    public void setFragments(LeagueListFragment[] fragments) {
+    public void setFragments(Fragment[] fragments) {
         this.fragments = fragments;
     }
 
@@ -60,5 +70,30 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
     @Override
     public int getCount() {
         return fragments.length;
+    }
+
+    @Override
+    public int getItemPosition(Object object) {
+        return POSITION_NONE;
+    }
+
+    public Calendar getDate() {
+        return date;
+    }
+
+    public void setScheduleToNextDay() {
+
+        //date.add(Calendar.DAY_OF_WEEK, -1);
+        viewTitle[0] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
+
+        date.add(Calendar.DAY_OF_WEEK, 2);
+        viewTitle[2] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
+
+        date.add(Calendar.DAY_OF_WEEK, -1);
+        viewTitle[1] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
+
+        fragments[1] = LeagueListFragment.newInstance(date);
+
+
     }
 }

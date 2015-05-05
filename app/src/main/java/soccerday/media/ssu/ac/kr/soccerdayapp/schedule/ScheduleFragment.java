@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
     ViewPager mScheduleViewPager;
     ScheduleViewPagerAdapter mScheduleViewPagerAdapter;
 
+    List<MaterialTab> testTab;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
 
@@ -48,24 +51,31 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
         mScheduleTabHost = (MaterialTabHost) scheduleFragmentView.findViewById(R.id.schedule_fragment_materialTabHost);
         mScheduleViewPager = (ViewPager) scheduleFragmentView.findViewById(R.id.schedule_fragment_pager);
 
+        testTab = new ArrayList<>();
+
         Calendar today = Calendar.getInstance();
 
         mScheduleViewPagerAdapter = new ScheduleViewPagerAdapter(getChildFragmentManager(), today);
 
         mScheduleViewPager.setAdapter(mScheduleViewPagerAdapter);
-
+        //mScheduleViewPager.setOffscreenPageLimit(1);
+        //ViewPager.Li
         mScheduleViewPager.setOnPageChangeListener(new ViewPager.SimpleOnPageChangeListener() {
 
             @Override
             public void onPageSelected(int position) {
-                mScheduleTabHost.setSelectedNavigationItem(position);
+                swipePage(position);
+                //mScheduleTabHost.setSelectedNavigationItem(position);
             }
+
         });
 
         for (int i = 0; i < mScheduleViewPagerAdapter.getCount(); i++) {
-            Log.i("tab", " "+i);
-            mScheduleTabHost.addTab(
-                    mScheduleTabHost.newTab().setText(mScheduleViewPagerAdapter.getViewTitle(i)).setTabListener(this));
+
+            MaterialTab test = mScheduleTabHost.newTab().setText(mScheduleViewPagerAdapter.getViewTitle(i)).setTabListener(this);
+            testTab.add(test);
+
+            mScheduleTabHost.addTab(test);
         }
         mScheduleTabHost.post(new Runnable() {
             @Override
@@ -74,10 +84,28 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
             }
         });
 
-        //mScheduleViewPager.setCurrentItem(1);
+        mScheduleViewPager.setCurrentItem(1);
         mScheduleTabHost.setSelectedNavigationItem(1);
 
         return scheduleFragmentView;
+    }
+
+    private void swipePage(int position) {
+
+
+        if(position == 2) {
+            mScheduleViewPagerAdapter.setScheduleToNextDay();
+
+            for (int i = 0; i < mScheduleViewPagerAdapter.getCount(); i++) {
+                testTab.get(i).setText(mScheduleViewPagerAdapter.getViewTitle(i));
+            }
+
+            mScheduleViewPager.setCurrentItem(1);
+            mScheduleTabHost.setSelectedNavigationItem(1);
+
+
+            mScheduleViewPager.getAdapter().notifyDataSetChanged();
+        }
     }
 
     public static ScheduleFragment newInstance(int position) {
@@ -89,8 +117,12 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
 
     @Override
     public void onTabSelected(MaterialTab materialTab) {
-        if(materialTab.getPosition() == 1)
-            mScheduleViewPager.setCurrentItem(materialTab.getPosition());
+        //mScheduleViewPager.setCurrentItem(materialTab.getPosition());
+        int position = materialTab.getPosition();
+        if(position != 1) {
+            swipePage(position);
+        }
+
     }
 
     @Override

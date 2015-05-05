@@ -1,5 +1,6 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp.fragments;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -85,15 +86,13 @@ public class LeagueListFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
 
+        Log.i("date", (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일");
+
         new ScheduleTask().execute(date);
 
         return leagueListFragmentView;
     }
 
-    public void setDateAndExcuteTask(Calendar date) {
-        this.date = date;
-        //new ScheduleTask().execute(date);
-    }
 
     public void updateLeagueList(List<LeagueListData> leagueListData) {
 
@@ -114,6 +113,21 @@ public class LeagueListFragment extends Fragment {
             mRecyclerView.getAdapter().notifyItemRangeInserted(0, leagueListData.size());
         }
         //mLigeaueListAdapter.notifyItemRangeInserted(0, mLeagueListData.size());
+    }
+
+    public static LeagueListFragment newInstance(Calendar date) {
+        LeagueListFragment lFragment = new LeagueListFragment();
+        Bundle args = new Bundle();
+        args.putSerializable("date", date);
+        lFragment.setArguments(args);
+
+        return lFragment;
+    }
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        this.date = (Calendar) getArguments().getSerializable("date");
     }
 
     private class ScheduleTask extends ScheduleParserTask {

@@ -28,11 +28,11 @@ public class ScheduleParserTask extends AsyncTask<Calendar, Integer, List<League
     @Override
     protected List<LeagueListData> doInBackground(Calendar... params) {
 
-        Calendar date = params[0].getInstance();
+        Calendar date = params[0];
 
         String dateString = date.get(Calendar.YEAR) +"년 " + (date.get(Calendar.MONTH) + 1)+"월 "
                     + date.get(Calendar.DAY_OF_MONTH)+ "일";
-
+        Log.i("task date", dateString);
         URL url = ParserData.getScheduleURL(dateString);
 
         Log.i("url", url.toString());
