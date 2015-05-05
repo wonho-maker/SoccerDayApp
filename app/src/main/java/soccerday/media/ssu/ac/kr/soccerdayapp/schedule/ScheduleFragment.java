@@ -65,7 +65,8 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
             @Override
             public void onPageSelected(int position) {
                 swipePage(position);
-                //mScheduleTabHost.setSelectedNavigationItem(position);
+
+                Log.i("page", ""+position);
             }
 
         });
@@ -92,20 +93,26 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
 
     private void swipePage(int position) {
 
-
-        if(position == 2) {
+        if(position==1) {
+            return;
+        }
+        else if(position == 2) {
             mScheduleViewPagerAdapter.setScheduleToNextDay();
 
-            for (int i = 0; i < mScheduleViewPagerAdapter.getCount(); i++) {
-                testTab.get(i).setText(mScheduleViewPagerAdapter.getViewTitle(i));
-            }
+        } else if(position == 0) {
+            mScheduleViewPagerAdapter.setScheduleToYesterday();
 
-            mScheduleViewPager.setCurrentItem(1);
-            mScheduleTabHost.setSelectedNavigationItem(1);
-
-
-            mScheduleViewPager.getAdapter().notifyDataSetChanged();
         }
+
+        for (int i = 0; i < mScheduleViewPagerAdapter.getCount(); i++) {
+            testTab.get(i).setText(mScheduleViewPagerAdapter.getViewTitle(i));
+        }
+
+        mScheduleViewPager.setCurrentItem(1);
+        mScheduleTabHost.setSelectedNavigationItem(1);
+
+        mScheduleViewPager.getAdapter().notifyDataSetChanged();
+
     }
 
     public static ScheduleFragment newInstance(int position) {
@@ -117,17 +124,34 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
 
     @Override
     public void onTabSelected(MaterialTab materialTab) {
-        //mScheduleViewPager.setCurrentItem(materialTab.getPosition());
-        int position = materialTab.getPosition();
-        if(position != 1) {
-            swipePage(position);
+        mScheduleViewPager.setCurrentItem(materialTab.getPosition());
+        //int position = materialTab.getPosition();
+        if(materialTab.getPosition() != 1) {
+            materialTab.disableTab();
         }
 
+        testTab.get(0).disableTab();
+        testTab.get(1).activateTab();
+        testTab.get(2).disableTab();
+        mScheduleTabHost.setSelectedNavigationItem(1);
+        mScheduleTabHost.notifyDataSetChanged();
+        Log.i("tab", ""+materialTab.getPosition());
+        //mScheduleTabHost.notifyDataSetChanged();
+        //Log.i("tab", ""+position);
     }
 
     @Override
     public void onTabReselected(MaterialTab materialTab) {
-
+        mScheduleViewPager.setCurrentItem(materialTab.getPosition());
+        if(materialTab.getPosition() != 1) {
+            materialTab.disableTab();
+        }
+        testTab.get(0).disableTab();
+        testTab.get(1).activateTab();
+        testTab.get(2).disableTab();
+        mScheduleTabHost.setSelectedNavigationItem(1);
+        mScheduleTabHost.notifyDataSetChanged();
+        Log.i("tab2", ""+materialTab.getPosition());
     }
 
     @Override

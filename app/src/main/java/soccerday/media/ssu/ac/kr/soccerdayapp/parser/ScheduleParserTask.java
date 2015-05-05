@@ -59,6 +59,8 @@ public class ScheduleParserTask extends AsyncTask<Calendar, Integer, List<League
 
         List<LeagueListData> leagueData = new ArrayList<>();
 
+        try {
+
         //second table is shedule table.
         Element element = source.getAllElements(HTMLElementName.TABLE).get(1);
 
@@ -66,75 +68,89 @@ public class ScheduleParserTask extends AsyncTask<Calendar, Integer, List<League
         scheduleTable.remove(0);
 
 
-        for (Element match : scheduleTable) {
-            MatchListData schedule = new MatchListData();
+            for (Element match : scheduleTable) {
+                MatchListData schedule = new MatchListData();
 
-            for (Element tableData : match.getAllElements(HTMLElementName.TD)) {
+                for (Element tableData : match.getAllElements(HTMLElementName.TD)) {
 
-                //match time and league data    example)<td class=time> ... </td>
-                if (tableData.getAttributeValue("class").equals("time")) {
+                    //match time and league data    example)<td class=time> ... </td>
+                    if (tableData.getAttributeValue("class").equals("time")) {
 
-                    //parse match time    example) <span class="bg_none">01:00</span>
-                    schedule.time = tableData.getFirstElement("span").getTextExtractor().toString();
+                        //parse match time    example) <span class="bg_none">01:00</span>
+                        schedule.time = tableData.getFirstElement("span").getTextExtractor().toString();
 
-                    //parse league   example) <p title="프리메라리가">
-                    schedule.league = tableData.getFirstElement("p").getAttributeValue("title");
-                }
+                        //parse league   example) <p title="프리메라리가">
+                        schedule.league = tableData.getFirstElement("p").getAttributeValue("title");
+                    }
 
-                //home team data example) <td class="l_team"> ... </td>
-                if (tableData.getAttributeValue("class").equals("l_team")) {
+                    //home team data example) <td class="l_team"> ... </td>
+                    if (tableData.getAttributeValue("class").equals("l_team")) {
 
-                    // example)  <img src="image adress" width="36" height="36" alt="말라가 CF">
-                    //team name - alt attribute value
-                    schedule.homeTeamTitle = tableData.getFirstElement("img").getAttributeValue("alt");
+                        // example)  <img src="image adress" width="36" height="36" alt="말라가 CF">
+                        //team name - alt attribute value
+                        schedule.homeTeamTitle = tableData.getFirstElement("img").getAttributeValue("alt");
 
-                    //team emblem - img src
-                    schedule.homeTeamEmblemURL = tableData.getFirstElement("img").getAttributeValue("src").split("src=")[1];
-                }
+                        //team emblem - img src
+                        schedule.homeTeamEmblemURL = tableData.getFirstElement("img").getAttributeValue("src").split("src=")[1];
+                    }
 
             /*   <td class="score"> ... </td>
                  <td class="score"> VS </td>    - before start match
                  <td class="score"> 2:2 </td>   - after match
              */
-                if (tableData.getAttributeValue("class").equals("score")) {
-                    schedule.score = tableData.getTextExtractor().toString();
+                    if (tableData.getAttributeValue("class").equals("score")) {
+                        schedule.score = tableData.getTextExtractor().toString();
+                    }
+
+                    //away team data example) <td class="l_team"> ... </td>
+                    if (tableData.getAttributeValue("class").equals("r_team")) {
+
+                        // example)  <img src="image adress" width="36" height="36" alt="레알 마드리드">
+                        //team name - alt attribute value
+                        schedule.awayTeamTitle = tableData.getFirstElement("img").getAttributeValue("alt");
+
+                        //team emblem - img src
+                        schedule.awayTeamEmblemURL = tableData.getFirstElement("img").getAttributeValue("src").split("src=")[1];
+                    }
+
+                    //place -  example)  <td class="place" title="La Rosaleda">La Rosaleda</td>
+                    if (tableData.getAttributeValue("class").equals("place")) {
+                        schedule.place = tableData.getAttributeValue("title");
+                    }
                 }
 
-                //away team data example) <td class="l_team"> ... </td>
-                if (tableData.getAttributeValue("class").equals("r_team")) {
-
-                    // example)  <img src="image adress" width="36" height="36" alt="레알 마드리드">
-                    //team name - alt attribute value
-                    schedule.awayTeamTitle = tableData.getFirstElement("img").getAttributeValue("alt");
-
-                    //team emblem - img src
-                    schedule.awayTeamEmblemURL = tableData.getFirstElement("img").getAttributeValue("src").split("src=")[1];
+                //check league and add schedule
+                boolean leagueExist = false;
+                for (LeagueListData leagueGroup : leagueData) {
+                    if (leagueGroup.getTitle().equals(schedule.league)) {
+                        leagueGroup.getExpandChildItemData().add(schedule);
+                        leagueExist = true;
+                    }
                 }
 
-                //place -  example)  <td class="place" title="La Rosaleda">La Rosaleda</td>
-                if (tableData.getAttributeValue("class").equals("place")) {
-                    schedule.place = tableData.getAttributeValue("title");
+                //if league is not exist, make a new Group and add schedule
+                if (!leagueExist) {
+                    // Log.e("le", schedule.league);
+                    LeagueListData newLeague = new LeagueListData(schedule.league, LeagueData.getLeageEmblemURL(schedule.league));
+                    newLeague.getExpandChildItemData().add(schedule);
+                    leagueData.add(newLeague);
                 }
             }
 
-            //check league and add schedule
-            boolean leagueExist = false;
             for (LeagueListData leagueGroup : leagueData) {
-                if (leagueGroup.getTitle().equals(schedule.league)) {
-                    leagueGroup.getExpandChildItemData().add(schedule);
-                    leagueExist = true;
-                }
-            }
+                leagueGroup.setTitle(LeagueData.checkTitle(leagueGroup.getTitle(), LeagueData.LEAGUE_TITLE));
 
-            //if league is not exist, make a new Group and add schedule
-            if (!leagueExist) {
-                // Log.e("le", schedule.league);
-                LeagueListData newLeague = new LeagueListData(schedule.league, LeagueData.getLeageEmblemURL(schedule.league));
-                newLeague.getExpandChildItemData().add(schedule);
-                leagueData.add(newLeague);
+                for (MatchListData matchTemp : leagueGroup.getExpandChildItemData()) {
+
+                    matchTemp.setHomeTeamTitle(LeagueData.checkTitle(matchTemp.getHomeTeamTitle(), LeagueData.TEAM_TITLE));
+
+                    matchTemp.setAwayTeamTitle(LeagueData.checkTitle(matchTemp.getAwayTeamTitle(), LeagueData.TEAM_TITLE));
+                }
             }
         }
-
+        catch (Exception e) {
+            return leagueData;
+        }
         return leagueData;
     }
 

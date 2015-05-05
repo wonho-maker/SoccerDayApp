@@ -1,5 +1,10 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp;
 
+import android.util.Log;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 /**
  * Created by Wonho Lee on 2015-04-30.
  */
@@ -55,4 +60,63 @@ public class LeagueData {
     public static final String ChampionsLeague_URL = "http://vignette3.wikia.nocookie.net/the-football-database/images/f/f4/UEFA_Champions_League_Logo.png";
 
     public static final String EuropaLeague_URL ="http://upload.wikimedia.org/wikipedia/it/archive/5/52/20090717151009!UEFA_Europa_League_logo.png";
+
+    public static final int LEAGUE_TITLE = 0;
+    public static final int TEAM_TITLE = 1;
+
+    public static String checkTitle(String title, int flag) {
+        if(flag == LEAGUE_TITLE) {
+            if(title.contains("샹피오나")) {
+                return "리그 앙";
+            }
+
+        }
+        else if(flag == TEAM_TITLE) {
+            title = checkAlphabetAndNumberWord(title);
+
+            if(title.contains("셀타 데")) {
+                return "셀타 비고";
+            }
+            else if(title.contains("아인트라흐")) {
+                return "프랑크푸르트";
+            }
+            else if(title.contains("묀헨글라드")) {
+                return "묀헨글라드바흐";
+            }
+            else if(title.contains("바이에른")) {
+                return "바이에른 뮌헨";
+            }
+
+        }
+
+        return title;
+
+    }
+
+    public static String checkAlphabetAndNumberWord(String title){
+        String regPice = "\\^[a-zA-Z0-9]*$";
+        String subsPice= "\\?";
+
+        String samplePattern = "";
+
+
+        title = title.replaceAll("[a-zA-Z0-9]", "");
+        title = title.trim();
+        //Log.i("title", title);
+        //Pattern.compile(regPice).matcher(this).
+
+       /* String[] sampleWords=new String[]{"변?태","변***태","경기도 변()태님", "변///\\태짓을"};
+
+        Pattern ptrn = Pattern.compile(checkRegex);
+        for(String word: sampleWords){
+            Matcher matcher = ptrn.matcher(word);
+            boolean check = matcher.find();
+            if (check){
+                System.out.println(word+" check:"+check+", 체크 단어:"+matcher.group());
+            }
+        }*/
+
+        return title;
+    }
+
 }

@@ -96,4 +96,18 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
 
 
     }
+
+    public void setScheduleToYesterday() {
+
+        date.add(Calendar.DAY_OF_WEEK, -2);
+        viewTitle[0] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
+
+        date.add(Calendar.DAY_OF_WEEK, 2);
+        viewTitle[2] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
+
+        date.add(Calendar.DAY_OF_WEEK, -1);
+        viewTitle[1] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
+
+        fragments[1] = LeagueListFragment.newInstance(date);
+    }
 }

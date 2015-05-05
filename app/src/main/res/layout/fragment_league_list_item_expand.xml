@@ -10,6 +10,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="2"
+        android:maxLines="2"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="홈 팀"/>
@@ -56,6 +57,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_weight="2"
+        android:maxLines="2"
         android:layout_gravity="center"
         android:gravity="center"
         android:text="원정 팀"/>
