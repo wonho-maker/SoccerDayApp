@@ -117,6 +117,23 @@ public class ScheduleParserTask extends AsyncTask<Calendar, Integer, List<League
                     if (tableData.getAttributeValue("class").equals("place")) {
                         schedule.place = tableData.getAttributeValue("title");
                     }
+
+                    if(tableData.getAttributeValue("class").equals("btns")) {
+                        schedule.linkURL = tableData.getFirstElement("a").getAttributeValue("href");
+
+                        Log.i("link",schedule.linkURL);
+
+                        String temp = tableData.getFirstElement("img").getAttributeValue("alt");
+                        Log.i("link2", temp);
+
+                        if(temp.contains("기록")) {
+                            schedule.setMatchState(MatchListData.MatchState.AFTER);
+                        } else if(temp.contains("비교")) {
+                            schedule.setMatchState(MatchListData.MatchState.BEFORE);
+                        } else {
+                            schedule.setMatchState(MatchListData.MatchState.ING);
+                        }
+                    }
                 }
 
                 //check league and add schedule
@@ -145,10 +162,13 @@ public class ScheduleParserTask extends AsyncTask<Calendar, Integer, List<League
                     matchTemp.setHomeTeamTitle(LeagueData.checkTitle(matchTemp.getHomeTeamTitle(), LeagueData.TEAM_TITLE));
 
                     matchTemp.setAwayTeamTitle(LeagueData.checkTitle(matchTemp.getAwayTeamTitle(), LeagueData.TEAM_TITLE));
+
+
                 }
             }
         }
         catch (Exception e) {
+            Log.i("E", e.toString());
             return leagueData;
         }
         return leagueData;

@@ -19,6 +19,7 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.drawer.NavigationDrawerFragment;
 import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.ScheduleFragment;
 
 
+
 public class MainActivity extends ActionBarActivity
         implements NavigationDrawerFragment.NavigationDrawerCallbacks {
 

@@ -4,4 +4,5 @@
     <color name="drawer_menu_item_divider">#67a0a0a0</color>
     <color name="primary">#ffffffff</color>
     <color name="league_list_background_color">#67bababa</color>
+    <color name="schedule_tab_indicator">#ff7e80ff</color>
 </resources>

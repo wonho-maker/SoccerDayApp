@@ -1,7 +1,5 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 
-import android.app.Activity;
-import android.app.ProgressDialog;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -10,48 +8,42 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
 import it.neokree.materialtabs.MaterialTab;
-import it.neokree.materialtabs.MaterialTabHost;
-import it.neokree.materialtabs.MaterialTabListener;
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
-import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LeagueListData;
-import soccerday.media.ssu.ac.kr.soccerdayapp.parser.ScheduleParserTask;
 
 /**
- * Created by Wonho Lee on 2015-05-01.
+ * Created by Wonho Lee on 2015-05-06.
  */
-public class ScheduleFragment extends Fragment implements MaterialTabListener {
+public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
-
-
-    MaterialTabHost mScheduleTabHost;
     ViewPager mScheduleViewPager;
     ScheduleViewPagerAdapter mScheduleViewPagerAdapter;
 
-    List<MaterialTab> testTab;
+    List<TextView> testTab;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
-
         super.onCreate(savedInstanceState);
-
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-        View scheduleFragmentView = (View)inflater.inflate(R.layout.fragment_schedule, container, false);
+        View scheduleFragmentView = (View) inflater.inflate(R.layout.fragment_schedule, container, false);
 
-        mScheduleTabHost = (MaterialTabHost) scheduleFragmentView.findViewById(R.id.schedule_fragment_materialTabHost);
         mScheduleViewPager = (ViewPager) scheduleFragmentView.findViewById(R.id.schedule_fragment_pager);
 
         testTab = new ArrayList<>();
+
+        testTab.add((TextView) scheduleFragmentView.findViewById(R.id.schedule_tab_1));
+        testTab.add((TextView) scheduleFragmentView.findViewById(R.id.schedule_tab_2));
+        testTab.add((TextView) scheduleFragmentView.findViewById(R.id.schedule_tab_3));
 
         Calendar today = Calendar.getInstance();
 
@@ -66,29 +58,22 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
             public void onPageSelected(int position) {
                 swipePage(position);
 
-                Log.i("page", ""+position);
+                Log.i("page", "" + position);
             }
 
         });
 
         for (int i = 0; i < mScheduleViewPagerAdapter.getCount(); i++) {
 
-            MaterialTab test = mScheduleTabHost.newTab().setText(mScheduleViewPagerAdapter.getViewTitle(i)).setTabListener(this);
-            testTab.add(test);
+            testTab.get(i).setText(mScheduleViewPagerAdapter.getViewTitle(i));
+            testTab.get(i).setOnClickListener(this);
 
-            mScheduleTabHost.addTab(test);
         }
-        mScheduleTabHost.post(new Runnable() {
-            @Override
-            public void run() {
-                mScheduleTabHost.requestLayout();
-            }
-        });
 
         mScheduleViewPager.setCurrentItem(1);
-        mScheduleTabHost.setSelectedNavigationItem(1);
 
         return scheduleFragmentView;
+
     }
 
     private void swipePage(int position) {
@@ -109,57 +94,16 @@ public class ScheduleFragment extends Fragment implements MaterialTabListener {
         }
 
         mScheduleViewPager.setCurrentItem(1);
-        mScheduleTabHost.setSelectedNavigationItem(1);
 
         mScheduleViewPager.getAdapter().notifyDataSetChanged();
+    }
 
+    @Override
+    public void onClick(View v) {
+        swipePage(testTab.indexOf(((TextView)v)));
     }
 
     public static ScheduleFragment newInstance(int position) {
-
-        ScheduleFragment scheduleFragment = new ScheduleFragment();
-
-        return scheduleFragment;
+        return new ScheduleFragment();
     }
-
-    @Override
-    public void onTabSelected(MaterialTab materialTab) {
-        mScheduleViewPager.setCurrentItem(materialTab.getPosition());
-        //int position = materialTab.getPosition();
-        if(materialTab.getPosition() != 1) {
-            materialTab.disableTab();
-        }
-
-        testTab.get(0).disableTab();
-        testTab.get(1).activateTab();
-        testTab.get(2).disableTab();
-        mScheduleTabHost.setSelectedNavigationItem(1);
-        mScheduleTabHost.notifyDataSetChanged();
-        Log.i("tab", ""+materialTab.getPosition());
-        //mScheduleTabHost.notifyDataSetChanged();
-        //Log.i("tab", ""+position);
-    }
-
-    @Override
-    public void onTabReselected(MaterialTab materialTab) {
-        mScheduleViewPager.setCurrentItem(materialTab.getPosition());
-        if(materialTab.getPosition() != 1) {
-            materialTab.disableTab();
-        }
-        testTab.get(0).disableTab();
-        testTab.get(1).activateTab();
-        testTab.get(2).disableTab();
-        mScheduleTabHost.setSelectedNavigationItem(1);
-        mScheduleTabHost.notifyDataSetChanged();
-        Log.i("tab2", ""+materialTab.getPosition());
-    }
-
-    @Override
-    public void onTabUnselected(MaterialTab materialTab) {
-
-    }
-
-
-
-
 }

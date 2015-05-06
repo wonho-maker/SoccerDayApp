@@ -16,9 +16,25 @@ public class MatchListData {
     public String awayTeamTitle;
     public String awayTeamEmblemURL;
 
-    public String matchState;
+    public MatchState matchState;
+    public static enum MatchState { BEFORE, ING, AFTER };
 
     public String place;
+
+    public String linkURL;
+
+    public String matchId;
+
+
+    public String getLinkURL() {
+        return linkURL;
+    }
+
+    public void setLinkURL(String linkURL) {
+        this.linkURL = linkURL;
+
+        matchId = linkURL.split("gameId=")[1];
+    }
 
     public String getTime() {
         return time;
@@ -76,11 +92,11 @@ public class MatchListData {
         this.awayTeamEmblemURL = awayTeamEmblemURL;
     }
 
-    public String getMatchState() {
+    public MatchState getMatchState() {
         return matchState;
     }
 
-    public void setMatchState(String matchState) {
+    public void setMatchState(MatchState matchState) {
         this.matchState = matchState;
     }
 

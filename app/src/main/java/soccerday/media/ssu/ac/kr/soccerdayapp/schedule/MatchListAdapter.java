@@ -1,7 +1,11 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.support.v7.widget.RecyclerView;
+import android.text.Spannable;
+import android.text.SpannableStringBuilder;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,7 +66,24 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
         DrawableTypeRequest<String> drawable = Glide.with(context).load(item.getHomeTeamEmblemURL());
         drawable.into(viewHolder.homeTeamIconImageView);
 
-        viewHolder.timeOrScoreTextView.setText(item.getTime());
+
+        if(item.getMatchState() == MatchListData.MatchState.BEFORE) {
+            viewHolder.timeOrScoreTextView.setText(item.getTime());
+            viewHolder.matchStateTextView.setText("경기 전");
+
+        } else if(item.getMatchState() == MatchListData.MatchState.ING) {
+            viewHolder.timeOrScoreTextView.setText(item.getScore());
+
+            SpannableStringBuilder scoreBuilder = new SpannableStringBuilder("경기 중");
+
+            scoreBuilder.setSpan(new ForegroundColorSpan(Color.RED), 0, scoreBuilder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+            viewHolder.matchStateTextView.setText(scoreBuilder);
+        }
+        else {
+            viewHolder.timeOrScoreTextView.setText(item.getScore());
+            viewHolder.matchStateTextView.setText("경기 종료");
+        }
+
         //viewHolder.matchStateTextView;
 
         DrawableTypeRequest<String> drawable2 = Glide.with(context).load(item.getAwayTeamEmblemURL());
