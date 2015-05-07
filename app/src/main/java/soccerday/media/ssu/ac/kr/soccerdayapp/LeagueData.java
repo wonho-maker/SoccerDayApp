@@ -94,27 +94,10 @@ public class LeagueData {
     }
 
     public static String checkAlphabetAndNumberWord(String title){
-        String regPice = "\\^[a-zA-Z0-9]*$";
-        String subsPice= "\\?";
-
-        String samplePattern = "";
-
 
         title = title.replaceAll("[a-zA-Z0-9]", "");
         title = title.trim();
-        //Log.i("title", title);
-        //Pattern.compile(regPice).matcher(this).
 
-       /* String[] sampleWords=new String[]{"변?태","변***태","경기도 변()태님", "변///\\태짓을"};
-
-        Pattern ptrn = Pattern.compile(checkRegex);
-        for(String word: sampleWords){
-            Matcher matcher = ptrn.matcher(word);
-            boolean check = matcher.find();
-            if (check){
-                System.out.println(word+" check:"+check+", 체크 단어:"+matcher.group());
-            }
-        }*/
 
         return title;
     }

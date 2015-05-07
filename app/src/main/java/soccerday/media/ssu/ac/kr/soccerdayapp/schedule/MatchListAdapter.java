@@ -6,19 +6,20 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
 import android.text.style.ForegroundColorSpan;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.balysv.materialripple.MaterialRippleLayout;
 import com.bumptech.glide.DrawableTypeRequest;
 import com.bumptech.glide.Glide;
 
 import java.util.List;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
-import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LeagueListData;
 
 /**
  * Created by Wonho Lee on 2015-05-03.
@@ -28,6 +29,8 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
     private List<MatchListData> mMatchListData;
 
     private final Context context;
+
+    private MatchListClickListener matchListClickListener;
 
     public MatchListAdapter(Context context, List<MatchListData> matchListData) {
         this.context = context;
@@ -90,6 +93,10 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
         drawable2.into(viewHolder.awayTeamIconImageView);
 
         viewHolder.awayTeamNameTextView.setText(item.getAwayTeamTitle());
+
+        if(!viewHolder.testLayout.hasOnClickListeners()) {
+            viewHolder.testLayout.setOnClickListener(new MatchListClick(position));
+        }
     }
 
     @Override
@@ -108,8 +115,12 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
         TextView awayTeamNameTextView;
         ImageView awayTeamIconImageView;
 
+        MaterialRippleLayout testLayout;
+
         public ViewHolder(View itemView) {
             super(itemView);
+
+            testLayout = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
 
             homeTeamNameTextView = (TextView) itemView.findViewById(R.id.league_list_expand_homeTeam_name);
             homeTeamIconImageView = (ImageView) itemView.findViewById(R.id.league_list_expand_homeTeam_icon);
@@ -128,5 +139,34 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
 
     public void setmMatchListData(List<MatchListData> mMatchListData) {
         this.mMatchListData = mMatchListData;
+    }
+
+    public void setMatchListClickListener(MatchListClickListener mcListener) {
+        matchListClickListener = mcListener;
+    }
+
+    private class MatchListClick implements View.OnClickListener {
+
+        int position;
+
+        public MatchListClick(int position) {
+            this.position = position;
+        }
+
+        @Override
+        public void onClick(View v) {
+            if (matchListClickListener != null) {
+                matchListClickListener.matchItemClick(position);
+
+            }
+            else {
+                Log.e("MatchListAdapter", "matchListClickListener is not implement");
+            }
+        }
+    }
+
+    public interface MatchListClickListener {
+
+        public void matchItemClick(int matchItemPosition);
     }
 }

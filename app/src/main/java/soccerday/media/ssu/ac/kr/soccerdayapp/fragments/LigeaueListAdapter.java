@@ -34,12 +34,14 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.MatchListData;
 /**
  * Created by Wonho Lee on 2015-05-02.
  */
-public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.ViewHolder> {
+public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.ViewHolder>  {
 
     private List<LeagueListData> mLeagueListData;
     private final int icon_Indicator_open;
     private final int icon_Indicator_close;
     private final Context context;
+
+    LigueAndMatchItemClickListener ligueAndMatchItemClickListener;
 
     public LigeaueListAdapter(List<LeagueListData> mLeagueListData, int icon_indicator_open, int icon_indicator_close, Context context) {
         this.mLeagueListData = mLeagueListData;
@@ -60,7 +62,7 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
     }
 
     @Override
-    public void onBindViewHolder(LigeaueListAdapter.ViewHolder viewHolder, int position) {
+    public void onBindViewHolder(LigeaueListAdapter.ViewHolder viewHolder, final int position) {
 
         LeagueListData item = mLeagueListData.get(position);
 
@@ -106,7 +108,15 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
 
         viewHolder.expandRecyclerView.setLayoutManager(viewHolder.mLayoutManager);
         //viewHolder.expandRecyclerView.setLayoutManager(new LinearLayoutManager(context));
-        viewHolder.expandRecyclerView.setAdapter(new MatchListAdapter(context, viewHolder.matchListData));
+        viewHolder.matchListAdapter = new MatchListAdapter((context), viewHolder.matchListData);
+
+        viewHolder.matchListAdapter.setMatchListClickListener(new MatchListAdapter.MatchListClickListener() {
+            @Override
+            public void matchItemClick(int matchItemPosition) {
+                ligueAndMatchItemClickListener.ligueAndMatchItemClick(position, matchItemPosition);
+            }
+        });
+        viewHolder.expandRecyclerView.setAdapter(viewHolder.matchListAdapter);
 
         viewHolder.expandRecyclerView.setVisibility(View.GONE);
 
@@ -126,11 +136,16 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
         //viewHolder.testCardView.se
     }
 
+    public interface LigueAndMatchItemClickListener {
+
+        public void ligueAndMatchItemClick(int leaguePosition, int matchPosition);
+    }
 
     @Override
     public int getItemCount() {
         return mLeagueListData.size();
     }
+
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -149,6 +164,8 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
 
         List<MatchListData> matchListData;
         MatchLinearLayoutManager mLayoutManager;
+        MatchListAdapter matchListAdapter;
+
 
         public ViewHolder(View itemView, int ViewType) {
             super(itemView);
