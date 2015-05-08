@@ -104,7 +104,7 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
         return mMatchListData.size();
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder{
+    public static class ViewHolder extends RecyclerView.ViewHolder{
 
         TextView homeTeamNameTextView;
         ImageView homeTeamIconImageView;
@@ -120,7 +120,7 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
         public ViewHolder(View itemView) {
             super(itemView);
 
-            testLayout = (MaterialRippleLayout) itemView.findViewById(R.id.ripple);
+            testLayout = (MaterialRippleLayout) itemView.findViewById(R.id.league_list_ripple);
 
             homeTeamNameTextView = (TextView) itemView.findViewById(R.id.league_list_expand_homeTeam_name);
             homeTeamIconImageView = (ImageView) itemView.findViewById(R.id.league_list_expand_homeTeam_icon);

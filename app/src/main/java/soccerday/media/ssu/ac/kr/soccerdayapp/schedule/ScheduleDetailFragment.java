@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,7 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.parser.ParserData;
  */
 public class ScheduleDetailFragment extends Fragment {
 
-    String leagueTitle;
+
     MatchListData matchData;
 
     WebView webView;
@@ -31,13 +32,13 @@ public class ScheduleDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-    public static ScheduleDetailFragment newInstance(String leagueTitle, MatchListData matchData){
+    public static ScheduleDetailFragment newInstance(MatchListData matchData){
 
         ScheduleDetailFragment scheduleDetailFragment = new ScheduleDetailFragment();
 
         Bundle args = new Bundle();
-        args.putString("leagueTitle", leagueTitle);
-        args.putSerializable("match", (java.io.Serializable) matchData);
+
+        args.putSerializable("match",  matchData);
         scheduleDetailFragment.setArguments(args);
 
         return scheduleDetailFragment;
@@ -48,20 +49,33 @@ public class ScheduleDetailFragment extends Fragment {
 
         View v = (View) inflater.inflate(R.layout.fragment_schedule_detail, container, false);
 
-        ((TextView)v.findViewById(R.id.schedule_detail_league_title)).setText(leagueTitle);
+        ((TextView)v.findViewById(R.id.schedule_detail_league_title)).setText(matchData.getLeague());
 
         ((TextView)v.findViewById(R.id.schedule_detail_home_title)).setText(matchData.getHomeTeamTitle());
         Glide.with(getActivity()).load(matchData.getHomeTeamEmblemURL()).into((ImageView)v.findViewById(R.id.schedule_detail_home_image));
 
-        ((TextView) v.findViewById(R.id.schedule_detail_time_or_score)).setText(leagueTitle);
-        ((TextView)v.findViewById(R.id.schedule_detail_match_state)).setText(leagueTitle);
+
+        if(matchData.getMatchState() == MatchListData.MatchState.BEFORE) {
+            ((TextView) v.findViewById(R.id.schedule_detail_time_or_score)).setText(matchData.getTime());
+            ((TextView)v.findViewById(R.id.schedule_detail_match_state)).setText("경기 전");
+        } else if(matchData.getMatchState() == MatchListData.MatchState.ING) {
+            ((TextView) v.findViewById(R.id.schedule_detail_time_or_score)).setText(matchData.getScore());
+            ((TextView)v.findViewById(R.id.schedule_detail_match_state)).setText("경기 중");
+        } else { //after
+            ((TextView) v.findViewById(R.id.schedule_detail_time_or_score)).setText(matchData.getScore());
+            ((TextView)v.findViewById(R.id.schedule_detail_match_state)).setText("경기 종료");
+        }
+
+
 
         Glide.with(getActivity()).load(matchData.getAwayTeamEmblemURL()).into((ImageView)v.findViewById(R.id.schedule_detail_away_image));
-        ((TextView)v.findViewById(R.id.schedule_detail_away_title)).setText(leagueTitle);
+        ((TextView)v.findViewById(R.id.schedule_detail_away_title)).setText(matchData.getAwayTeamTitle());
 
         webView = ((WebView)v.findViewById(R.id.schedule_detail_web_view));
         webView.getSettings().setJavaScriptEnabled(true);
-        webView.loadUrl(ParserData.getScheduleDetailURL(leagueTitle, matchData.matchId));
+
+        Log.i("url", ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.matchId));
+        webView.loadUrl(ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.matchId));
 
         return v;
     }
@@ -70,7 +84,7 @@ public class ScheduleDetailFragment extends Fragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
 
-        this.leagueTitle = getArguments().getString("leagueTitle");
+
         this.matchData = (MatchListData) getArguments().getSerializable("match");
     }
 }

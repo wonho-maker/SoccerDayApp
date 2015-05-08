@@ -18,6 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.LeagueData;
+import soccerday.media.ssu.ac.kr.soccerdayapp.MainActivity;
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
 import soccerday.media.ssu.ac.kr.soccerdayapp.parser.ScheduleParserTask;
 
@@ -37,6 +38,8 @@ public class LeagueListFragment extends Fragment {
 
     Calendar date;
 
+    LigeaueListAdapter.LeagueAndMatchItemClickListener leagueAndMatchItemClickListener;
+
     public LeagueListFragment() {
         super();
     }
@@ -52,9 +55,16 @@ public class LeagueListFragment extends Fragment {
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
 
         View leagueListFragmentView = (View)inflater.inflate(R.layout.fragment_league_list, container, false);
 
@@ -80,6 +90,8 @@ public class LeagueListFragment extends Fragment {
         mLigeaueListAdapter = new LigeaueListAdapter(mLeagueListData, R.drawable.ic_indicator_up, R.drawable.ic_indicator
         , getActivity());
 
+        mLigeaueListAdapter.setLeagueAndMatchItemClickListener((MainActivity)getActivity());
+
         mRecyclerView.setAdapter(mLigeaueListAdapter);
 
         mLayoutManager = new LinearLayoutManager(getActivity());
@@ -93,6 +105,9 @@ public class LeagueListFragment extends Fragment {
         return leagueListFragmentView;
     }
 
+    public void setLeagueAndMatchItemClickListener(LigeaueListAdapter.LeagueAndMatchItemClickListener listener) {
+        this.leagueAndMatchItemClickListener = listener;
+    }
 
     public void updateLeagueList(List<LeagueListData> leagueListData) {
 

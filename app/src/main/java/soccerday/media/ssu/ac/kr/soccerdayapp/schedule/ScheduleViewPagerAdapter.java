@@ -10,15 +10,19 @@ import java.util.Calendar;
 import soccerday.media.ssu.ac.kr.soccerdayapp.MainActivity;
 import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LeagueListDummyFragment;
 import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LeagueListFragment;
+import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LigeaueListAdapter;
 
 /**
  * Created by Wonho Lee on 2015-05-01.
  */
 public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
 
+    private  LigeaueListAdapter.LeagueAndMatchItemClickListener leagueAndMatchItemClickListener;
     Fragment[] fragments = new Fragment[3];
     String[] viewTitle = new String[3];
     Calendar date;
+
+    LeagueListFragment leagueListFragment;
 
     public ScheduleViewPagerAdapter(FragmentManager fragmentManager) {
         super(fragmentManager);
@@ -32,7 +36,11 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
 
         this.date = date;
         fragments[0] = new LeagueListDummyFragment();
-        fragments[1] = LeagueListFragment.newInstance(date);
+
+        leagueListFragment = LeagueListFragment.newInstance(date);
+        leagueListFragment.setLeagueAndMatchItemClickListener(leagueAndMatchItemClickListener);
+
+        fragments[1] = leagueListFragment;
         fragments[2] = new LeagueListDummyFragment();
 
 
@@ -48,6 +56,10 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
         viewTitle[1] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
 
         //Log.i("loading"," logdijf");
+    }
+
+    public void setLeagueAndMatchItemClickListener(LigeaueListAdapter.LeagueAndMatchItemClickListener leagueAndMatchItemClickListener) {
+        this.leagueAndMatchItemClickListener = leagueAndMatchItemClickListener;
     }
 
     public String getViewTitle(int index) {

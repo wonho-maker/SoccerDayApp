@@ -16,12 +16,16 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.drawer.NavigationDrawerFragment;
+import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LigeaueListAdapter;
+import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.MatchListData;
+import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.ScheduleDetailFragment;
 import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.ScheduleFragment;
 
 
 
 public class MainActivity extends ActionBarActivity
-        implements NavigationDrawerFragment.NavigationDrawerCallbacks {
+        implements NavigationDrawerFragment.NavigationDrawerCallbacks,
+        LigeaueListAdapter.LeagueAndMatchItemClickListener{
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
@@ -76,6 +80,40 @@ public class MainActivity extends ActionBarActivity
                         .replace(R.id.container, scheduleFragment, "scheduleFragment")
                         .commit();
             }
+        }
+    }
+
+    @Override
+    public void leagueAndMatchItemClick(int leaguePosition, int matchPosition) {
+        Log.i("main", ""+leaguePosition+", "+matchPosition);
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        Log.i("fragments", fragmentManager.getFragments().toString());
+
+            ScheduleFragment scheduleFragment = (ScheduleFragment) fragmentManager.findFragmentByTag("scheduleFragment");
+
+
+
+    }
+
+    @Override
+    public void leagueAndMatchItemClick(int leaguePosition, int matchPosition, MatchListData matchData) {
+        Log.i("main", ""+leaguePosition+", "+matchPosition);
+
+
+        FragmentManager fragmentManager = getSupportFragmentManager();
+
+        ScheduleDetailFragment scheduleDetailFragment = (ScheduleDetailFragment) fragmentManager.findFragmentByTag("scheduleDetailFragment");
+
+        if (scheduleDetailFragment == null) {
+
+            scheduleDetailFragment = scheduleDetailFragment.newInstance(matchData);
+
+            fragmentManager.beginTransaction()
+                    .addToBackStack("scheduleFragment")
+                    .replace(R.id.container, scheduleDetailFragment, "scheduleDetailFragment")
+                    .commit();
         }
     }
 

@@ -41,7 +41,7 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
     private final int icon_Indicator_close;
     private final Context context;
 
-    LigueAndMatchItemClickListener ligueAndMatchItemClickListener;
+    LeagueAndMatchItemClickListener leagueAndMatchItemClickListener;
 
     public LigeaueListAdapter(List<LeagueListData> mLeagueListData, int icon_indicator_open, int icon_indicator_close, Context context) {
         this.mLeagueListData = mLeagueListData;
@@ -64,7 +64,7 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
     @Override
     public void onBindViewHolder(LigeaueListAdapter.ViewHolder viewHolder, final int position) {
 
-        LeagueListData item = mLeagueListData.get(position);
+        final LeagueListData item = mLeagueListData.get(position);
 
         viewHolder.titleTextView.setText(item.getTitle()); // Setting the Text with the array of our Titles
 
@@ -113,7 +113,12 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
         viewHolder.matchListAdapter.setMatchListClickListener(new MatchListAdapter.MatchListClickListener() {
             @Override
             public void matchItemClick(int matchItemPosition) {
-                ligueAndMatchItemClickListener.ligueAndMatchItemClick(position, matchItemPosition);
+                //Log.i("lladap", " p"+matchItemPosition);
+                //Log.i("lladap", " p"+position);
+                if(leagueAndMatchItemClickListener != null) {
+                    //leagueAndMatchItemClickListener.leagueAndMatchItemClick(position, matchItemPosition);
+                    leagueAndMatchItemClickListener.leagueAndMatchItemClick(position, matchItemPosition, item.getExpandChildItemData().get(matchItemPosition));
+                }
             }
         });
         viewHolder.expandRecyclerView.setAdapter(viewHolder.matchListAdapter);
@@ -136,9 +141,16 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
         //viewHolder.testCardView.se
     }
 
-    public interface LigueAndMatchItemClickListener {
+    public void setLeagueAndMatchItemClickListener(LeagueAndMatchItemClickListener listener) {
 
-        public void ligueAndMatchItemClick(int leaguePosition, int matchPosition);
+        this.leagueAndMatchItemClickListener = listener;
+    }
+
+    public interface LeagueAndMatchItemClickListener {
+
+        public void leagueAndMatchItemClick(int leaguePosition, int matchPosition);
+
+        public void leagueAndMatchItemClick(int leaguePosition, int matchPosition, MatchListData matchData);
     }
 
     @Override

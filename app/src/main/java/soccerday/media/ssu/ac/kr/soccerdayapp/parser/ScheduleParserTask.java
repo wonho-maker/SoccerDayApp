@@ -121,10 +121,10 @@ public class ScheduleParserTask extends AsyncTask<Calendar, Integer, List<League
                     if(tableData.getAttributeValue("class").equals("btns")) {
                         schedule.linkURL = tableData.getFirstElement("a").getAttributeValue("href");
 
-                        Log.i("link",schedule.linkURL);
+                        //Log.i("link",schedule.linkURL);
 
                         String temp = tableData.getFirstElement("img").getAttributeValue("alt");
-                        Log.i("link2", temp);
+                        //Log.i("link2", temp);
 
                         if(temp.contains("기록")) {
                             schedule.setMatchState(MatchListData.MatchState.AFTER);
@@ -163,8 +163,9 @@ public class ScheduleParserTask extends AsyncTask<Calendar, Integer, List<League
 
                     matchTemp.setAwayTeamTitle(LeagueData.checkTitle(matchTemp.getAwayTeamTitle(), LeagueData.TEAM_TITLE));
 
-
+                    matchTemp.setMatchId(LeagueData.splitMatchId(matchTemp.getLinkURL()));
                 }
+
             }
         }
         catch (Exception e) {

@@ -15,7 +15,9 @@ import java.util.Calendar;
 import java.util.List;
 
 import it.neokree.materialtabs.MaterialTab;
+import soccerday.media.ssu.ac.kr.soccerdayapp.MainActivity;
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
+import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LigeaueListAdapter;
 
 /**
  * Created by Wonho Lee on 2015-05-06.
@@ -48,7 +50,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         Calendar today = Calendar.getInstance();
 
         mScheduleViewPagerAdapter = new ScheduleViewPagerAdapter(getChildFragmentManager(), today);
-
+        //mScheduleViewPagerAdapter.setLeagueAndMatchItemClickListener((MainActivity)getActivity());
         mScheduleViewPager.setAdapter(mScheduleViewPagerAdapter);
         //mScheduleViewPager.setOffscreenPageLimit(1);
         //ViewPager.Li
@@ -75,6 +77,8 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
         return scheduleFragmentView;
 
     }
+
+
 
     private void swipePage(int position) {
 

@@ -49,31 +49,31 @@ public class ParserData {
         if(leagueTitle.contains("세리에")) {
             detailURL += parameter + "seria";
         }
-        else if(detailURL.contains("분데스")) {
+        else if(leagueTitle.contains("분데스")) {
             detailURL += parameter + "bundesliga";
         }
-        else if(detailURL.contains("프리미어")) {
+        else if(leagueTitle.contains("프리미어")) {
             detailURL += parameter + "epl";
         }
-        else if(detailURL.contains("프리메라")) {
+        else if(leagueTitle.contains("프리메라")) {
             detailURL += parameter + "primera";
         }
-        else if(detailURL.contains("리그앙")) {
+        else if(leagueTitle.contains("리그앙")) {
             detailURL += parameter + "ligue1";
         }
-        else if(detailURL.contains("샹피오나")) {
+        else if(leagueTitle.contains("샹피오나")) {
             detailURL += parameter + "ligue1";
         }
-        else if(detailURL.contains("에레디비지")) {
+        else if(leagueTitle.contains("에레디비지")) {
             detailURL += parameter + "eredivisie";
         }
-        else if(detailURL.contains("챔피언스")) {
+        else if(leagueTitle.contains("챔피언스")) {
             detailURL += parameter + "champs";
         }
-        else if(detailURL.contains("유로파")) {
+        else if(leagueTitle.contains("유로파")) {
             detailURL += parameter + "europa";
         }
-        else if(detailURL.contains("잉글랜드")) {
+        else if(leagueTitle.contains("잉글랜드")) {
             detailURL += parameter + "facup";
         }
         else {

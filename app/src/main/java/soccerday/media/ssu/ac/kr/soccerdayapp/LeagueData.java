@@ -102,4 +102,8 @@ public class LeagueData {
         return title;
     }
 
+    public static String splitMatchId(String linkURL) {
+
+        return linkURL.split("gameId=")[1];
+    }
 }

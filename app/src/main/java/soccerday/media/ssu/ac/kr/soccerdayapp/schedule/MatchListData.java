@@ -1,9 +1,11 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 
+import java.io.Serializable;
+
 /**
  * Created by Wonho Lee on 2015-05-02.
  */
-public class MatchListData {
+public class MatchListData implements Serializable {
 
     public String time;
     public String league;
@@ -108,5 +110,26 @@ public class MatchListData {
         this.place = place;
     }
 
+    public String getMatchId() {
+        return matchId;
+    }
 
+    public void setMatchId(String matchId) {
+        this.matchId = matchId;
+    }
+
+    @Override
+    public String toString() {
+        return "MatchListData{" +
+                "time='" + time + '\'' +
+                ", league='" + league + '\'' +
+                ", homeTeamTitle='" + homeTeamTitle + '\'' +
+                ", score='" + score + '\'' +
+                ", awayTeamTitle='" + awayTeamTitle + '\'' +
+                ", matchState=" + matchState +
+                ", place='" + place + '\'' +
+                ", linkURL='" + linkURL + '\'' +
+                ", matchId='" + matchId + '\'' +
+                '}';
+    }
 }
