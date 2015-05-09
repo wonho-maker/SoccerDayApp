@@ -2,17 +2,21 @@ package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.JavascriptInterface;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.pnikosis.materialishprogress.ProgressWheel;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
 import soccerday.media.ssu.ac.kr.soccerdayapp.parser.ParserData;
@@ -25,6 +29,7 @@ public class ScheduleDetailFragment extends Fragment {
 
     MatchListData matchData;
 
+    ProgressWheel progressWheel;
     WebView webView;
 
     @Override
@@ -48,6 +53,8 @@ public class ScheduleDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
         View v = (View) inflater.inflate(R.layout.fragment_schedule_detail, container, false);
+
+        progressWheel = (ProgressWheel) v.findViewById(R.id.schedule_detail_progress_wheel);
 
         ((TextView)v.findViewById(R.id.schedule_detail_league_title)).setText(matchData.getLeague());
 
@@ -73,11 +80,50 @@ public class ScheduleDetailFragment extends Fragment {
 
         webView = ((WebView)v.findViewById(R.id.schedule_detail_web_view));
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.setWebViewClient(setWebViewClient());
+
+        webView.addJavascriptInterface(new myJavaScriptInterface(), "CallAndroidFunction");
 
         Log.i("url", ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.matchId));
         webView.loadUrl(ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.matchId));
 
         return v;
+    }
+
+    private WebViewClient setWebViewClient() {
+        return new WebViewClient(){
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                super.onPageFinished(view, url);
+
+                view.loadUrl("javascript:(function() { " +
+                        "document.getElementsByClassName('end_head')[0].style.display = 'none'; " +
+                        "document.getElementsByClassName('gs_wrp typ4')[0].style.display = 'none'; " +
+                        "document.getElementsByClassName('mtch_bx_wrp')[0].style.display = 'none'; " +
+                        "})()");
+
+                view.loadUrl("javascript: window.CallAndroidFunction.setVisible()");
+            }
+        };
+    }
+
+    public class myJavaScriptInterface {
+        Handler mHandler = new Handler();
+        @JavascriptInterface
+        public void setVisible(){
+            mHandler.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    if(progressWheel != null) {
+                        progressWheel.setVisibility(View.GONE);
+                    }
+                }
+            });
+        }
+
+
+
     }
 
     @Override
