@@ -98,8 +98,8 @@ public class ScheduleDetailFragment extends Fragment {
 
                 view.loadUrl("javascript:(function() { " +
                         "document.getElementsByClassName('end_head')[0].style.display = 'none'; " +
-                        "document.getElementsByClassName('gs_wrp typ4')[0].style.display = 'none'; " +
                         "document.getElementsByClassName('mtch_bx_wrp')[0].style.display = 'none'; " +
+                        "document.getElementsByClassName('gs_wrp typ4')[0].style.display = 'none'; " +
                         "})()");
 
                 view.loadUrl("javascript: window.CallAndroidFunction.setVisible()");

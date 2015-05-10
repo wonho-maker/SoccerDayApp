@@ -112,6 +112,7 @@ public class MainActivity extends ActionBarActivity
 
             fragmentManager.beginTransaction()
                     .addToBackStack("scheduleFragment")
+                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
                     .replace(R.id.container, scheduleDetailFragment, "scheduleDetailFragment")
                     .commit();
         }

@@ -49,8 +49,14 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
         Calendar today = Calendar.getInstance();
 
-        mScheduleViewPagerAdapter = new ScheduleViewPagerAdapter(getChildFragmentManager(), today);
-        //mScheduleViewPagerAdapter.setLeagueAndMatchItemClickListener((MainActivity)getActivity());
+        Bundle stateData = getArguments();
+
+        if(stateData == null) {
+            mScheduleViewPagerAdapter = new ScheduleViewPagerAdapter(getChildFragmentManager(), today);
+        } else {
+            mScheduleViewPagerAdapter = (ScheduleViewPagerAdapter)savedInstanceState.getSerializable("test");
+            Log.i("save", "save2");
+        }
         mScheduleViewPager.setAdapter(mScheduleViewPagerAdapter);
         //mScheduleViewPager.setOffscreenPageLimit(1);
         //ViewPager.Li
@@ -109,5 +115,25 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
     public static ScheduleFragment newInstance(int position) {
         return new ScheduleFragment();
+    }
+
+
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+
+        Bundle args = new Bundle();
+        args.putSerializable("test", mScheduleViewPagerAdapter);
+        //this.setArguments(args);
+        getArguments().putSerializable("test", mScheduleViewPagerAdapter);
+        Log.i("save", "save");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //outState.putSerializable("test", mScheduleViewPagerAdapter);
+
     }
 }

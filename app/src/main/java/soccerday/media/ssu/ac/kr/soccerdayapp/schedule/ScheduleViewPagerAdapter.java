@@ -5,6 +5,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.util.Log;
 
+import java.io.Serializable;
 import java.util.Calendar;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.MainActivity;
@@ -15,7 +16,7 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LigeaueListAdapter;
 /**
  * Created by Wonho Lee on 2015-05-01.
  */
-public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
+public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter implements Serializable {
 
     private  LigeaueListAdapter.LeagueAndMatchItemClickListener leagueAndMatchItemClickListener;
     Fragment[] fragments = new Fragment[3];
@@ -30,6 +31,8 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
         fragments[0] = new LeagueListFragment();
         //fragments[1] = new LeagueListFragment();
     }
+
+
 
     public ScheduleViewPagerAdapter(FragmentManager childFragmentManager, Calendar date) {
         super(childFragmentManager);
@@ -60,6 +63,10 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter{
 
     public void setLeagueAndMatchItemClickListener(LigeaueListAdapter.LeagueAndMatchItemClickListener leagueAndMatchItemClickListener) {
         this.leagueAndMatchItemClickListener = leagueAndMatchItemClickListener;
+    }
+
+    public void setViewTitle(String[] viewTitle) {
+        this.viewTitle = viewTitle;
     }
 
     public String getViewTitle(int index) {
