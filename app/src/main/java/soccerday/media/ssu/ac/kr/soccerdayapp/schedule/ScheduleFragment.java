@@ -105,6 +105,7 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
         mScheduleViewPager.setCurrentItem(1);
 
+
         mScheduleViewPager.getAdapter().notifyDataSetChanged();
     }
 
@@ -123,11 +124,11 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     public void onDestroyView() {
         super.onDestroyView();
 
-        Bundle args = new Bundle();
+        /*Bundle args = new Bundle();
         args.putSerializable("test", mScheduleViewPagerAdapter);
         //this.setArguments(args);
         getArguments().putSerializable("test", mScheduleViewPagerAdapter);
-        Log.i("save", "save");
+        Log.i("save", "save");*/
     }
 
     @Override

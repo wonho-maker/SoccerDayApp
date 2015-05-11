@@ -3,7 +3,9 @@ package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.view.ViewPager;
 import android.util.Log;
+import android.view.ViewGroup;
 
 import java.io.Serializable;
 import java.util.Calendar;
@@ -65,6 +67,10 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter implemen
         this.leagueAndMatchItemClickListener = leagueAndMatchItemClickListener;
     }
 
+    public LeagueListFragment getLeagueListFragment() {
+        return leagueListFragment;
+    }
+
     public void setViewTitle(String[] viewTitle) {
         this.viewTitle = viewTitle;
     }
@@ -83,8 +89,11 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter implemen
 
     @Override
     public Fragment getItem(int position) {
+
         return fragments[position];
     }
+
+
 
     @Override
     public int getCount() {
@@ -128,5 +137,6 @@ public class ScheduleViewPagerAdapter extends FragmentStatePagerAdapter implemen
         viewTitle[1] = (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일";
 
         fragments[1] = LeagueListFragment.newInstance(date);
+
     }
 }

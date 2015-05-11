@@ -1,6 +1,7 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp;
 
 import android.app.Activity;
+import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
@@ -59,18 +60,25 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+
+        super.onConfigurationChanged(newConfig);
+    }
+
+    @Override
     public void onNavigationDrawerItemSelected(int position) {
         // update the main content by replacing fragments
         FragmentManager fragmentManager = getSupportFragmentManager();
         if(position == 0) {
+            fragmentManager.popBackStackImmediate(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
 
             fragmentManager.beginTransaction()
                     .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                     .commit();
         }
         else if(position == 1) {
-            ScheduleFragment scheduleFragment = (ScheduleFragment) fragmentManager.findFragmentByTag("scheduleFragment");
-            Log.i("fragments", fragmentManager.getFragments().toString());
+            /*ScheduleFragment scheduleFragment = (ScheduleFragment) fragmentManager.findFragmentByTag("scheduleFragment");
+            //Log.i("fragments", fragmentManager.getFragments().toString());
 
             if (scheduleFragment == null) {
                 Log.i("test", "position");
@@ -79,7 +87,14 @@ public class MainActivity extends ActionBarActivity
                 fragmentManager.beginTransaction()
                         .replace(R.id.container, scheduleFragment, "scheduleFragment")
                         .commit();
-            }
+            }*/
+            fragmentManager.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
+
+            ScheduleFragment scheduleFragment = ScheduleFragment.newInstance(position);
+
+            fragmentManager.beginTransaction()
+                    .replace(R.id.container, scheduleFragment, "scheduleFragment")
+                    .commit();
         }
     }
 
@@ -112,7 +127,7 @@ public class MainActivity extends ActionBarActivity
 
             fragmentManager.beginTransaction()
                     .addToBackStack("scheduleFragment")
-                    .setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out)
+                    .setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out)
                     .replace(R.id.container, scheduleDetailFragment, "scheduleDetailFragment")
                     .commit();
         }

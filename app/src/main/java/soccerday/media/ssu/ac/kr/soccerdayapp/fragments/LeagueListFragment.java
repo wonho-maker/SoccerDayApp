@@ -40,6 +40,8 @@ public class LeagueListFragment extends Fragment {
 
     LigeaueListAdapter.LeagueAndMatchItemClickListener leagueAndMatchItemClickListener;
 
+    boolean isFirst;
+
     public LeagueListFragment() {
         super();
     }
@@ -52,7 +54,7 @@ public class LeagueListFragment extends Fragment {
 
         taskProgressDia = new ProgressDialog(getActivity());
 
-
+        isFirst = true;
     }
 
     @Override
@@ -98,11 +100,18 @@ public class LeagueListFragment extends Fragment {
 
         mRecyclerView.setLayoutManager(mLayoutManager);
 
-        Log.i("date", (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일");
+        //Log.i("date", (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일");
 
-        new ScheduleTask().execute(date);
+        if(isFirst) {
+            new ScheduleTask().execute(date);
+            isFirst = false;
+        }
 
         return leagueListFragmentView;
+    }
+
+    public void executeScheduleTask() {
+        new ScheduleTask().execute(date);
     }
 
     public void setLeagueAndMatchItemClickListener(LigeaueListAdapter.LeagueAndMatchItemClickListener listener) {

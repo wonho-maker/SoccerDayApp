@@ -1,6 +1,8 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 
 import android.app.Activity;
+import android.content.ActivityNotFoundException;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -10,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.webkit.JavascriptInterface;
+import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 import android.widget.ImageView;
@@ -17,6 +20,8 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.pnikosis.materialishprogress.ProgressWheel;
+
+import java.net.URISyntaxException;
 
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
 import soccerday.media.ssu.ac.kr.soccerdayapp.parser.ParserData;
@@ -80,7 +85,13 @@ public class ScheduleDetailFragment extends Fragment {
 
         webView = ((WebView)v.findViewById(R.id.schedule_detail_web_view));
         webView.getSettings().setJavaScriptEnabled(true);
+        webView.getSettings().setPluginState(WebSettings.PluginState.ON);
+
+        webView.getSettings().setAllowFileAccess(true);
+        webView.getSettings().setSupportMultipleWindows(true);
+
         webView.setWebViewClient(setWebViewClient());
+        webView.setWebChromeClient(new CustomChromeClient(getActivity()));
 
         webView.addJavascriptInterface(new myJavaScriptInterface(), "CallAndroidFunction");
 
@@ -103,6 +114,27 @@ public class ScheduleDetailFragment extends Fragment {
                         "})()");
 
                 view.loadUrl("javascript: window.CallAndroidFunction.setVisible()");
+            }
+
+            @Override
+            public boolean shouldOverrideUrlLoading(WebView view, String url) {
+                if (url.startsWith("intent://")) {
+                    Intent intent;
+                    try {
+                        intent = Intent.parseUri(url, Intent.URI_INTENT_SCHEME);
+                    } catch (URISyntaxException ex) {
+                        return false;
+                    }
+                    if (intent != null) {
+                        try {
+                            getActivity().startActivity(intent);
+                        } catch (ActivityNotFoundException e) {
+                            Log.e("test3", "ActivityNotFoundException");
+                        }
+                        return true;
+                    }
+                }
+                return super.shouldOverrideUrlLoading(view, url);
             }
         };
     }
@@ -133,4 +165,6 @@ public class ScheduleDetailFragment extends Fragment {
 
         this.matchData = (MatchListData) getArguments().getSerializable("match");
     }
+
+
 }
