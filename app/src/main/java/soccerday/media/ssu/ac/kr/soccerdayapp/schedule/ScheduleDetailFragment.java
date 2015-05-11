@@ -3,11 +3,13 @@ package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +25,7 @@ import com.pnikosis.materialishprogress.ProgressWheel;
 
 import java.net.URISyntaxException;
 
+import soccerday.media.ssu.ac.kr.soccerdayapp.MainActivity;
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
 import soccerday.media.ssu.ac.kr.soccerdayapp.parser.ParserData;
 
@@ -37,9 +40,12 @@ public class ScheduleDetailFragment extends Fragment {
     ProgressWheel progressWheel;
     WebView webView;
 
+    CustomChromeClient customChromeClient;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+
     }
 
     public static ScheduleDetailFragment newInstance(MatchListData matchData){
@@ -91,7 +97,42 @@ public class ScheduleDetailFragment extends Fragment {
         webView.getSettings().setSupportMultipleWindows(true);
 
         webView.setWebViewClient(setWebViewClient());
-        webView.setWebChromeClient(new CustomChromeClient(getActivity()));
+        customChromeClient = new CustomChromeClient(getActivity());
+        webView.setWebChromeClient(customChromeClient);
+
+        /*webView.setOnKeyListener(new View.OnKeyListener() {
+            @Override
+            public boolean onKey(View v, int keyCode, KeyEvent event) {
+
+                if (keyCode == KeyEvent.KEYCODE_BACK) {
+                    if (KeyEvent.ACTION_UP == event.getAction()) {
+                        if (webView.canGoBack()) {
+                            webView.goBack();
+                        }else{
+                            getActivity().onBackPressed();
+                            return true;
+                        }
+                    }
+                    return true;
+                } else {
+                    getActivity().onKeyDown(keyCode,event);
+                    return true;
+                }
+
+            }
+        });*/
+        ((MainActivity)getActivity()).setOnKeyBackPressedListener(new MainActivity.onKeyBackPressedListener() {
+            @Override
+            public boolean onBack() {
+                if (webView != null && webView.canGoBack()) {
+                    webView.goBack();
+                    return true;
+                }else{
+
+                    return false;
+                }
+            }
+        });
 
         webView.addJavascriptInterface(new myJavaScriptInterface(), "CallAndroidFunction");
 
@@ -101,8 +142,31 @@ public class ScheduleDetailFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onPause() {
+        super.onPause();
+        Log.i("fr","pause");
+        //customChromeClient.onHideCustomView();
+}
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        Log.i("fr","resume");
+        customChromeClient.onHideCustomView();
+    }
+
     private WebViewClient setWebViewClient() {
         return new WebViewClient(){
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                super.onPageStarted(view, url, favicon);
+
+                if(progressWheel != null) {
+                    progressWheel.setVisibility(View.VISIBLE);
+                }
+            }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
@@ -158,6 +222,8 @@ public class ScheduleDetailFragment extends Fragment {
 
     }
 
+
+
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
@@ -166,5 +232,12 @@ public class ScheduleDetailFragment extends Fragment {
         this.matchData = (MatchListData) getArguments().getSerializable("match");
     }
 
+    @Override
+    public void onDetach() {
+        webView.destroy();
+        webView = null;
 
+
+        super.onDetach();
+    }
 }
