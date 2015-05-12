@@ -1,6 +1,7 @@
 package soccerday.media.ssu.ac.kr.soccerdayapp;
 
 import android.app.Activity;
+import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBarActivity;
@@ -38,11 +39,15 @@ public class MainActivity extends ActionBarActivity
      */
     private CharSequence mTitle;
 
-
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
         setContentView(R.layout.activity_main);
 
         Toolbar mainToolbar = (Toolbar) findViewById(R.id.main_toolbar);
@@ -70,6 +75,8 @@ public class MainActivity extends ActionBarActivity
             }
         }
     }
+
+
 
     public interface onKeyBackPressedListener {
         public boolean onBack();

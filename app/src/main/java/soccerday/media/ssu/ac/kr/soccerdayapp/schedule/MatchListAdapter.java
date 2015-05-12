@@ -83,7 +83,9 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
             viewHolder.matchStateTextView.setText(scoreBuilder);
         }
         else {
-            viewHolder.timeOrScoreTextView.setText(item.getScore());
+            viewHolder.timeOrScoreTextView.setTextColor(Color.WHITE);
+            viewHolder.timeOrScoreTextView.setBackgroundColor(Color.parseColor("#EE4D6674"));
+            viewHolder.timeOrScoreTextView.setText("?");
             viewHolder.matchStateTextView.setText("경기 종료");
         }
 

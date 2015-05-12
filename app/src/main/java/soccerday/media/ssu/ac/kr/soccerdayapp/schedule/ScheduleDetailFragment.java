@@ -3,7 +3,9 @@ package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 import android.app.Activity;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.graphics.Bitmap;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -39,6 +41,8 @@ public class ScheduleDetailFragment extends Fragment {
 
     ProgressWheel progressWheel;
     WebView webView;
+
+    TextView scoreTextView;
 
     CustomChromeClient customChromeClient;
     @Override
@@ -80,7 +84,13 @@ public class ScheduleDetailFragment extends Fragment {
             ((TextView) v.findViewById(R.id.schedule_detail_time_or_score)).setText(matchData.getScore());
             ((TextView)v.findViewById(R.id.schedule_detail_match_state)).setText("경기 중");
         } else { //after
-            ((TextView) v.findViewById(R.id.schedule_detail_time_or_score)).setText(matchData.getScore());
+            scoreTextView = ((TextView) v.findViewById(R.id.schedule_detail_time_or_score));
+            scoreTextView.setBackgroundColor(Color.parseColor("#ff2d363f"));
+            scoreTextView.setText("?");
+            /*
+            * viewHolder.timeOrScoreTextView.setTextColor(Color.WHITE);
+            viewHolder.timeOrScoreTextView.setBackgroundColor(Color.parseColor("#EE4D6674"));
+            viewHolder.timeOrScoreTextView.setText("?");*/
             ((TextView)v.findViewById(R.id.schedule_detail_match_state)).setText("경기 종료");
         }
 
@@ -124,7 +134,10 @@ public class ScheduleDetailFragment extends Fragment {
         ((MainActivity)getActivity()).setOnKeyBackPressedListener(new MainActivity.onKeyBackPressedListener() {
             @Override
             public boolean onBack() {
-                if (webView != null && webView.canGoBack()) {
+                if(customChromeClient.isShowingFullScreen()) {
+                    customChromeClient.onHideCustomView();
+                    return true;
+                } else if (webView != null && webView.canGoBack()) {
                     webView.goBack();
                     return true;
                 }else{
@@ -227,6 +240,7 @@ public class ScheduleDetailFragment extends Fragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+
 
 
         this.matchData = (MatchListData) getArguments().getSerializable("match");

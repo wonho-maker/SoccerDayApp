@@ -37,7 +37,7 @@
         android:id="@+id/league_list_expand_homeTeam_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2.5"
+        android:layout_weight="2.4"
         android:src="@drawable/ic_favorite_star_fill"/>
 
     <LinearLayout
@@ -50,16 +50,22 @@
     <TextView
         android:id="@+id/league_list_expand_time_or_score"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:layout_marginLeft="15dp"
 
+        android:layout_marginRight="15dp"
         android:gravity="center"
+        android:layout_gravity="center"
         android:text="01:30"/>
 
     <TextView
         android:id="@+id/league_list_expand_match_state"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
+        android:layout_weight="1"
+
         android:text="경기 전"/>
 
     </LinearLayout>
@@ -68,7 +74,7 @@
         android:id="@+id/league_list_expand_awayTeam_icon"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_weight="2.5"
+        android:layout_weight="2.4"
         android:src="@drawable/ic_favorite_star_fill"/>
 
     <TextView

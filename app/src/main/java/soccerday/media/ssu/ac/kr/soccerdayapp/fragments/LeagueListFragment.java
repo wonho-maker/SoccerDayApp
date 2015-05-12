@@ -162,20 +162,37 @@ public class LeagueListFragment extends Fragment {
 
         @Override
         protected void onPreExecute() {
-            taskProgressDia.setTitle("Schedule Loading...");
-            taskProgressDia.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-            taskProgressDia.setCancelable(false);
 
-            taskProgressDia.show();
+            if(taskProgressDia != null) {
+                taskProgressDia.setTitle("Schedule Loading...");
+                taskProgressDia.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                taskProgressDia.setCancelable(false);
+
+                taskProgressDia.show();
+            }
         }
 
         @Override
         protected void onPostExecute(List<LeagueListData> leagueListData) {
 
             updateLeagueList(leagueListData);
-            taskProgressDia.dismiss();
+            if(taskProgressDia != null) {
+                if(taskProgressDia.isShowing())
+                    taskProgressDia.dismiss();
+            }
+
             //Log.i("progress End", "end");
 
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+
+        if(taskProgressDia != null) {
+            if(taskProgressDia.isShowing())
+                taskProgressDia.dismiss();
         }
     }
 }
