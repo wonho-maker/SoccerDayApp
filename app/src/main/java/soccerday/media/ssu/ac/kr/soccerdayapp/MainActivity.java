@@ -60,10 +60,26 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    public void onConfigurationChanged(Configuration newConfig) {
+    public void onBackPressed() {
 
-        super.onConfigurationChanged(newConfig);
+        if(mOnKeyBackPressedListener == null) {
+            super.onBackPressed();
+        } else {
+            if(!mOnKeyBackPressedListener.onBack()) {
+                super.onBackPressed();
+            }
+        }
     }
+
+    public interface onKeyBackPressedListener {
+        public boolean onBack();
+    }
+    private onKeyBackPressedListener mOnKeyBackPressedListener;
+
+    public void setOnKeyBackPressedListener(onKeyBackPressedListener listener) {
+        mOnKeyBackPressedListener = listener;
+    }
+
 
     @Override
     public void onNavigationDrawerItemSelected(int position) {
@@ -101,14 +117,6 @@ public class MainActivity extends ActionBarActivity
     @Override
     public void leagueAndMatchItemClick(int leaguePosition, int matchPosition) {
         Log.i("main", ""+leaguePosition+", "+matchPosition);
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-
-        Log.i("fragments", fragmentManager.getFragments().toString());
-
-            ScheduleFragment scheduleFragment = (ScheduleFragment) fragmentManager.findFragmentByTag("scheduleFragment");
-
-
 
     }
 

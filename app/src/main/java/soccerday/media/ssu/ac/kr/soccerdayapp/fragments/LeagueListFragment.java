@@ -54,6 +54,8 @@ public class LeagueListFragment extends Fragment {
 
         taskProgressDia = new ProgressDialog(getActivity());
 
+        mLeagueListData = new ArrayList<>();
+
         isFirst = true;
     }
 
@@ -78,7 +80,7 @@ public class LeagueListFragment extends Fragment {
 
         //mRecyclerView.set
         //test
-        mLeagueListData = new ArrayList<>();
+
 
         //String leagueTitles[] = getResources().getStringArray(R.array.league_titles);
 
@@ -105,6 +107,8 @@ public class LeagueListFragment extends Fragment {
         if(isFirst) {
             new ScheduleTask().execute(date);
             isFirst = false;
+        } else {
+            //updateLeagueList(mLeagueListData);
         }
 
         return leagueListFragmentView;

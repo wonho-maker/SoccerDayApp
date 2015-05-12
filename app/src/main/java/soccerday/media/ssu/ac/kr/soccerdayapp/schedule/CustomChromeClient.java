@@ -47,13 +47,13 @@ public class CustomChromeClient extends WebChromeClient {
     @Override
     public void onShowCustomView(View view, CustomViewCallback callback) {
 
-        //super.onShowCustomView(view,callback);
+        super.onShowCustomView(view,callback);
 
-        /*if (mCustomView != null) {
+        if (mCustomView != null) {
             callback.onCustomViewHidden();
             return;
         }
-
+/*
         mOriginalOrientation = mActivity.getRequestedOrientation();
         //mOriginalOrientation = ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE;
 
@@ -79,6 +79,11 @@ public class CustomChromeClient extends WebChromeClient {
             }
 
         }*/
+        mCustomView = view;
+        customViewCallback = callback;
+
+        Log.i("ch", "1");
+
         final int API_VERSION = Build.VERSION.SDK_INT;
 
         if(API_VERSION < Build.VERSION_CODES.KITKAT) {
@@ -113,6 +118,7 @@ public class CustomChromeClient extends WebChromeClient {
                 Intent i = new Intent(Intent.ACTION_VIEW);
 
                 i.setDataAndType(mUri, "video/mp4");
+
                 mActivity.startActivity(i);
             }
         } else {
@@ -152,16 +158,19 @@ public class CustomChromeClient extends WebChromeClient {
     @Override
     public void onHideCustomView() {
         if (mCustomView == null) {
+            Log.i("ch", "2");
             return;
         }
 
-        FrameLayout decor = (FrameLayout) mActivity.getWindow().getDecorView();
-        decor.removeView(mFullscreenContainer);
+        //FrameLayout decor = (FrameLayout) mActivity.getWindow().getDecorView();
+        //decor.removeView(mFullscreenContainer);
+        Log.i("ch", "2");
         mFullscreenContainer = null;
         mCustomView = null;
         customViewCallback.onCustomViewHidden();
 
-        mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+
+        //mActivity.setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
     }
 
 

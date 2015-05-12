@@ -28,10 +28,14 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
     ScheduleViewPagerAdapter mScheduleViewPagerAdapter;
 
     List<TextView> testTab;
-
+    Calendar today;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        testTab = new ArrayList<>();
+
+        today = Calendar.getInstance();
     }
 
     @Override
@@ -41,21 +45,20 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
         mScheduleViewPager = (ViewPager) scheduleFragmentView.findViewById(R.id.schedule_fragment_pager);
 
-        testTab = new ArrayList<>();
+
+        testTab.clear();
 
         testTab.add((TextView) scheduleFragmentView.findViewById(R.id.schedule_tab_1));
         testTab.add((TextView) scheduleFragmentView.findViewById(R.id.schedule_tab_2));
         testTab.add((TextView) scheduleFragmentView.findViewById(R.id.schedule_tab_3));
+        Log.i("tab", "tab");
 
-        Calendar today = Calendar.getInstance();
 
-        Bundle stateData = getArguments();
-
-        if(stateData == null) {
+        if(mScheduleViewPagerAdapter == null) {
             mScheduleViewPagerAdapter = new ScheduleViewPagerAdapter(getChildFragmentManager(), today);
+
         } else {
-            mScheduleViewPagerAdapter = (ScheduleViewPagerAdapter)savedInstanceState.getSerializable("test");
-            Log.i("save", "save2");
+            mScheduleViewPagerAdapter = new ScheduleViewPagerAdapter(getChildFragmentManager(), mScheduleViewPagerAdapter.getDate());
         }
         mScheduleViewPager.setAdapter(mScheduleViewPagerAdapter);
         //mScheduleViewPager.setOffscreenPageLimit(1);
@@ -75,6 +78,8 @@ public class ScheduleFragment extends Fragment implements View.OnClickListener {
 
             testTab.get(i).setText(mScheduleViewPagerAdapter.getViewTitle(i));
             testTab.get(i).setOnClickListener(this);
+            //Log.i("testtab", "" + testTab.get(i));
+
 
         }
 
