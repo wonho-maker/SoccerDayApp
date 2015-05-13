@@ -109,8 +109,8 @@ public class LeagueListFragment extends Fragment {
         //Log.i("date", (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일");
 
         if(isFirst) {
-            new ScheduleTask().execute( date);
-
+            new ScheduleTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, date);
+            new ScheduleHighlightTask().executeOnExecutor(AsyncTask.SERIAL_EXECUTOR, date);
             isFirst = false;
         } else {
             if(isLoading) {
@@ -191,10 +191,7 @@ public class LeagueListFragment extends Fragment {
 
             //new ScheduleHighlightTask().execute( date);
 
-            if(taskProgressDia != null) {
-                if(taskProgressDia.isShowing())
-                    taskProgressDia.dismiss();
-            }
+
 
             //Log.i("progress End", "end");
 
@@ -228,16 +225,14 @@ public class LeagueListFragment extends Fragment {
                     }
                 }
 
-                //mLigeaueListAdapter.setmLeagueListData(mLeagueListData);
-                //Log.i("list" , mLeagueListData.toString());
-                //mLigeaueListAdapter = new LigeaueListAdapter(mLeagueListData, R.drawable.ic_indicator_up, R.drawable.ic_indicator
-                //      , getActivity());
 
-                //mRecyclerView.setAdapter(mLigeaueListAdapter);
-                //mRecyclerView.getAdapter().notifyItemRangeInserted(0, mLeagueListData.size());
+                mRecyclerView.getAdapter().notifyDataSetChanged();
             }
 
-
+            if(taskProgressDia != null) {
+                if(taskProgressDia.isShowing())
+                    taskProgressDia.dismiss();
+            }
         }
     }
 

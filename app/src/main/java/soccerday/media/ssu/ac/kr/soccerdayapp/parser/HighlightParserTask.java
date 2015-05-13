@@ -32,9 +32,9 @@ public class HighlightParserTask extends AsyncTask<Calendar, Integer, List<Strin
                 + date.get(Calendar.DAY_OF_MONTH)+ "일";
 
         //Log.i("task date", dateString);
-        URL url = ParserData.getScheduleURL(dateString);
+        URL url = ParserData.getScheduleMobileURL(dateString);
 
-        Log.i("url", url.toString());
+        //Log.i("url", url.toString());
         Source source = null;
 
         try {
@@ -43,13 +43,13 @@ public class HighlightParserTask extends AsyncTask<Calendar, Integer, List<Strin
 
         } catch (IOException e) {
             e.printStackTrace();
-            Log.i("taskBackground", e.toString());
+            //Log.i("taskBackground", e.toString());
         }
 
         if (source != null) {
 
             //Log.i("source2", source.getPreliminaryEncodingInfo());
-            Log.i("source3", source.getRenderer().toString());
+            //Log.i("source3", source.getRenderer().toString());
 
         } else {
             //Log.i("source", "null");
@@ -60,15 +60,16 @@ public class HighlightParserTask extends AsyncTask<Calendar, Integer, List<Strin
 
             hasHighLightTeamNameList = new ArrayList<>();
 
-          /*  Element element = source.getAllElements(HTMLElementName.TABLE).get(0);
-            Log.i("teamName1",source.getAllElements(HTMLElementName.TABLE).toString());
+            Element element = source.getAllElements(HTMLElementName.TABLE).get(0);
+            //Log.i("teamName1",element.toString());
             List<Element> scheduleTable = element.getAllElements(HTMLElementName.TABLE);
+            scheduleTable.remove(0);
 
             for(Element schedule : scheduleTable) {
 
                 List<Element> aElement = schedule.getAllElements(HTMLElementName.A);
-                Log.i("teamName1",aElement.toString());
-                if(aElement.size() > 3) {
+                Log.i("teamName3",schedule.toString());
+                if(aElement.size() >= 3) {
                     String teamName = aElement.get(0).getTextExtractor().toString();
 
                     hasHighLightTeamNameList.add(teamName);
@@ -76,7 +77,7 @@ public class HighlightParserTask extends AsyncTask<Calendar, Integer, List<Strin
             }
 
 
-        Log.i("teamName",hasHighLightTeamNameList.toString());*/
+        Log.i("teamName",hasHighLightTeamNameList.toString());
 
         return hasHighLightTeamNameList;
     }

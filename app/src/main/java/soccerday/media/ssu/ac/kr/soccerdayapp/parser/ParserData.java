@@ -14,7 +14,7 @@ public class ParserData {
 
     private static String naverSearchURL = "http://search.naver.com/search.naver?query=";
 
-    private static String naverMobileSearchURL = "http://m.search.naver.com/search.naver?query=";
+    private static String naverMobileSearchURL = "https://m.search.naver.com/search.naver?where=m&query=";
 
     private static String queryForSchedule = "해외축구일정";
 

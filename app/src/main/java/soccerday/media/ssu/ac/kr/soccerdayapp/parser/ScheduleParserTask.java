@@ -173,26 +173,6 @@ public class ScheduleParserTask extends AsyncTask<Calendar, Integer, List<League
             return leagueData;
         }
 
-        Source source2 = null;
-
-        try {
-
-            source2 = new Source(ParserData.getScheduleMobileURL(dateString));
-
-        } catch (IOException e) {
-            //e.printStackTrace();
-            Log.i("taskBackground", e.toString());
-        }
-
-        if (source2 != null) {
-
-            //Log.i("source2", source.getPreliminaryEncodingInfo());
-            Log.i("source3", source2.getRenderer().toString());
-
-        } else {
-            //Log.i("source", "null");
-        }
-
         return leagueData;
     }
 
