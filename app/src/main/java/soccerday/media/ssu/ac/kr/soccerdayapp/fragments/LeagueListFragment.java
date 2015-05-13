@@ -2,6 +2,7 @@ package soccerday.media.ssu.ac.kr.soccerdayapp.fragments;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,9 @@ import java.util.List;
 import soccerday.media.ssu.ac.kr.soccerdayapp.LeagueData;
 import soccerday.media.ssu.ac.kr.soccerdayapp.MainActivity;
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
+import soccerday.media.ssu.ac.kr.soccerdayapp.parser.HighlightParserTask;
 import soccerday.media.ssu.ac.kr.soccerdayapp.parser.ScheduleParserTask;
+import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.MatchListData;
 
 /**
  * Created by Wonho Lee on 2015-05-01.
@@ -41,7 +44,7 @@ public class LeagueListFragment extends Fragment {
     LigeaueListAdapter.LeagueAndMatchItemClickListener leagueAndMatchItemClickListener;
 
     boolean isFirst;
-
+    boolean isLoading;
     public LeagueListFragment() {
         super();
     }
@@ -57,6 +60,7 @@ public class LeagueListFragment extends Fragment {
         mLeagueListData = new ArrayList<>();
 
         isFirst = true;
+        isLoading = false;
     }
 
     @Override
@@ -105,10 +109,13 @@ public class LeagueListFragment extends Fragment {
         //Log.i("date", (date.get(Calendar.MONTH) + 1) + "월 " + + date.get(Calendar.DAY_OF_MONTH)+ "일");
 
         if(isFirst) {
-            new ScheduleTask().execute(date);
+            new ScheduleTask().execute( date);
+
             isFirst = false;
         } else {
-            //updateLeagueList(mLeagueListData);
+            if(isLoading) {
+
+            }
         }
 
         return leagueListFragmentView;
@@ -131,6 +138,7 @@ public class LeagueListFragment extends Fragment {
         } else {
             noMatchTextView.setVisibility(View.GONE);
 
+            //mLeagueListData.clear();
             mLeagueListData.addAll(leagueListData);
             mLigeaueListAdapter.setmLeagueListData(leagueListData);
             //Log.i("list" , mLeagueListData.toString());
@@ -139,6 +147,8 @@ public class LeagueListFragment extends Fragment {
 
             //mRecyclerView.setAdapter(mLigeaueListAdapter);
             mRecyclerView.getAdapter().notifyItemRangeInserted(0, leagueListData.size());
+
+
         }
         //mLigeaueListAdapter.notifyItemRangeInserted(0, mLeagueListData.size());
     }
@@ -176,12 +186,57 @@ public class LeagueListFragment extends Fragment {
         protected void onPostExecute(List<LeagueListData> leagueListData) {
 
             updateLeagueList(leagueListData);
+
+            isLoading = true;
+
+            //new ScheduleHighlightTask().execute( date);
+
             if(taskProgressDia != null) {
                 if(taskProgressDia.isShowing())
                     taskProgressDia.dismiss();
             }
 
             //Log.i("progress End", "end");
+
+        }
+    }
+
+    private class ScheduleHighlightTask extends HighlightParserTask {
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+        }
+
+        @Override
+        protected void onPostExecute(List<String> strings) {
+
+            if(mLeagueListData != null) {
+
+                for(LeagueListData leagueListData : mLeagueListData ) {
+
+                    for(MatchListData matchListData : leagueListData.getExpandChildItemData()) {
+                        for(String teamName : strings) {
+
+                            if(matchListData.getHomeTeamTitle().contains(teamName)) {
+                                matchListData.setHasHighlight(true);
+                            }
+                        }
+
+
+                    }
+                }
+
+                //mLigeaueListAdapter.setmLeagueListData(mLeagueListData);
+                //Log.i("list" , mLeagueListData.toString());
+                //mLigeaueListAdapter = new LigeaueListAdapter(mLeagueListData, R.drawable.ic_indicator_up, R.drawable.ic_indicator
+                //      , getActivity());
+
+                //mRecyclerView.setAdapter(mLigeaueListAdapter);
+                //mRecyclerView.getAdapter().notifyItemRangeInserted(0, mLeagueListData.size());
+            }
+
 
         }
     }

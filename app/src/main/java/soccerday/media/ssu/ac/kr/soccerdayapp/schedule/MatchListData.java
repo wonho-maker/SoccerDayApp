@@ -27,6 +27,15 @@ public class MatchListData implements Serializable {
 
     public String matchId;
 
+    public boolean hasHighlight;
+
+    public boolean hasHighlight() {
+        return hasHighlight;
+    }
+
+    public void setHasHighlight(boolean hasHighlight) {
+        this.hasHighlight = hasHighlight;
+    }
 
     public String getLinkURL() {
         return linkURL;

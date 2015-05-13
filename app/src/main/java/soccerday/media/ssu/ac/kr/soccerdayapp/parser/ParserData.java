@@ -14,6 +14,8 @@ public class ParserData {
 
     private static String naverSearchURL = "http://search.naver.com/search.naver?query=";
 
+    private static String naverMobileSearchURL = "http://m.search.naver.com/search.naver?query=";
+
     private static String queryForSchedule = "해외축구일정";
 
     private static String scheduleDetailURL = "http://m.sports.naver.com/worldfootball/gamecenter/worldfootball/index.nhn?tab=cheer&gameId=";
@@ -31,6 +33,18 @@ public class ParserData {
     public static URL getScheduleURL(String date) {
         try {
             scheduleURL = new URL(naverSearchURL +URLEncoder.encode(date + queryForSchedule, "UTF-8"));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+
+        return scheduleURL;
+    }
+
+    public static URL getScheduleMobileURL(String date) {
+        try {
+            scheduleURL = new URL(naverMobileSearchURL +URLEncoder.encode(date + queryForSchedule, "UTF-8"));
         } catch (MalformedURLException e) {
             e.printStackTrace();
         } catch (UnsupportedEncodingException e) {
