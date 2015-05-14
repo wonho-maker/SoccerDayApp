@@ -2,6 +2,7 @@ package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -39,12 +40,21 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
 
     @Override
     public MatchListAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_league_list_item_expand, parent, false);
+
+        if(viewType == 0) {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_league_list_item_expand, parent, false);
 
 
-        ViewHolder vhItem = new ViewHolder(v);
+            ViewHolder vhItem = new ViewHolder(v, viewType);
 
-        return vhItem;
+            return vhItem;
+        } else {
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.fragment_league_list_item_expand, parent, false);
+            ViewHolder vhItem = new ViewHolder(v, viewType);
+
+            return vhItem;
+        }
+
     }
 
     public void showAndHide(boolean show, List<MatchListData> temp) {
@@ -60,52 +70,90 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder viewHolder, int position) {
-        MatchListData item = mMatchListData.get(position);
-
-        viewHolder.homeTeamNameTextView.setText(item.getHomeTeamTitle());
-
-
-        DrawableTypeRequest<String> drawable = Glide.with(context).load(item.getHomeTeamEmblemURL());
-        drawable.into(viewHolder.homeTeamIconImageView);
-
-
-        if(item.getMatchState() == MatchListData.MatchState.BEFORE) {
-            viewHolder.timeOrScoreTextView.setText(item.getTime());
-            viewHolder.matchStateTextView.setText("경기 전");
-
-        } else if(item.getMatchState() == MatchListData.MatchState.ING) {
-            viewHolder.timeOrScoreTextView.setText(item.getScore());
-
-            SpannableStringBuilder scoreBuilder = new SpannableStringBuilder("경기 중");
-
-            scoreBuilder.setSpan(new ForegroundColorSpan(Color.RED), 0, scoreBuilder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
-            viewHolder.matchStateTextView.setText(scoreBuilder);
+    public int getItemViewType(int position) {
+        //return super.getItemViewType(position);
+        if(mMatchListData.get(position).hasHighlight()) {
+            return 1;
+        } else {
+            return 0;
         }
-        else {
-            if(item.hasHighlight()) {
-                viewHolder.timeOrScoreTextView.setTextColor(Color.WHITE);
-                viewHolder.timeOrScoreTextView.setBackgroundColor(Color.parseColor("#EE4D6674"));
-                viewHolder.timeOrScoreTextView.setText("?");
-                viewHolder.matchStateTextView.setText("경기 종료");
+    }
+
+    @Override
+    public void onBindViewHolder(ViewHolder viewHolder, int position) {
+        if(viewHolder.itemType == 0) {
+
+            MatchListData item = mMatchListData.get(position);
+
+            viewHolder.homeTeamNameTextView.setText(item.getHomeTeamTitle());
+
+
+            DrawableTypeRequest<String> drawable = Glide.with(context).load(item.getHomeTeamEmblemURL());
+            drawable.into(viewHolder.homeTeamIconImageView);
+
+
+            if (item.getMatchState() == MatchListData.MatchState.BEFORE) {
+                viewHolder.timeOrScoreTextView.setText(item.getTime());
+                viewHolder.matchStateTextView.setText("경기 전");
+
+            } else if (item.getMatchState() == MatchListData.MatchState.ING) {
+                viewHolder.timeOrScoreTextView.setText(item.getScore());
+
+                SpannableStringBuilder scoreBuilder = new SpannableStringBuilder("경기 중");
+
+                scoreBuilder.setSpan(new ForegroundColorSpan(Color.RED), 0, scoreBuilder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.matchStateTextView.setText(scoreBuilder);
             } else {
 
+                    viewHolder.timeOrScoreTextView.setText(item.getScore());
+                    viewHolder.matchStateTextView.setText("경기 종료");
 
-                viewHolder.timeOrScoreTextView.setText(item.getScore());
-                viewHolder.matchStateTextView.setText("경기 종료");
             }
 
-        }
+            DrawableTypeRequest<String> drawable2 = Glide.with(context).load(item.getAwayTeamEmblemURL());
+            drawable2.into(viewHolder.awayTeamIconImageView);
 
-        //viewHolder.matchStateTextView;
+            viewHolder.awayTeamNameTextView.setText(item.getAwayTeamTitle());
 
-        DrawableTypeRequest<String> drawable2 = Glide.with(context).load(item.getAwayTeamEmblemURL());
-        drawable2.into(viewHolder.awayTeamIconImageView);
+            if (!viewHolder.testLayout.hasOnClickListeners()) {
+                viewHolder.testLayout.setOnClickListener(new MatchListClick(position));
+            }
+        } else {
+            MatchListData item = mMatchListData.get(position);
 
-        viewHolder.awayTeamNameTextView.setText(item.getAwayTeamTitle());
+            viewHolder.homeTeamNameTextView.setText(item.getHomeTeamTitle());
 
-        if(!viewHolder.testLayout.hasOnClickListeners()) {
-            viewHolder.testLayout.setOnClickListener(new MatchListClick(position));
+
+            DrawableTypeRequest<String> drawable = Glide.with(context).load(item.getHomeTeamEmblemURL());
+            drawable.into(viewHolder.homeTeamIconImageView);
+
+
+            if (item.getMatchState() == MatchListData.MatchState.BEFORE) {
+                viewHolder.timeOrScoreTextView.setText(item.getTime());
+                viewHolder.matchStateTextView.setText("경기 전");
+
+            } else if (item.getMatchState() == MatchListData.MatchState.ING) {
+                viewHolder.timeOrScoreTextView.setText(item.getScore());
+
+                SpannableStringBuilder scoreBuilder = new SpannableStringBuilder("경기 중");
+
+                scoreBuilder.setSpan(new ForegroundColorSpan(Color.RED), 0, scoreBuilder.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
+                viewHolder.matchStateTextView.setText(scoreBuilder);
+            } else {
+
+                viewHolder.timeOrScoreTextView.setText("?");
+                viewHolder.matchStateTextView.setText("경기 종료");
+
+            }
+
+            DrawableTypeRequest<String> drawable2 = Glide.with(context).load(item.getAwayTeamEmblemURL());
+            drawable2.into(viewHolder.awayTeamIconImageView);
+
+            viewHolder.awayTeamNameTextView.setText(item.getAwayTeamTitle());
+
+            if (!viewHolder.testLayout.hasOnClickListeners()) {
+                viewHolder.testLayout.setOnClickListener(new MatchListClick(position));
+            }
         }
     }
 
@@ -115,6 +163,8 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder{
+
+        int itemType;
 
         TextView homeTeamNameTextView;
         ImageView homeTeamIconImageView;
@@ -127,19 +177,38 @@ public class MatchListAdapter extends RecyclerView.Adapter<MatchListAdapter.View
 
         MaterialRippleLayout testLayout;
 
-        public ViewHolder(View itemView) {
+        public ViewHolder(View itemView, int viewType) {
             super(itemView);
 
-            testLayout = (MaterialRippleLayout) itemView.findViewById(R.id.league_list_ripple);
+            if(viewType == 1) {
+                testLayout = (MaterialRippleLayout) itemView.findViewById(R.id.league_list_ripple);
 
-            homeTeamNameTextView = (TextView) itemView.findViewById(R.id.league_list_expand_homeTeam_name);
-            homeTeamIconImageView = (ImageView) itemView.findViewById(R.id.league_list_expand_homeTeam_icon);
+                homeTeamNameTextView = (TextView) itemView.findViewById(R.id.league_list_expand_homeTeam_name);
+                homeTeamIconImageView = (ImageView) itemView.findViewById(R.id.league_list_expand_homeTeam_icon);
 
-            timeOrScoreTextView = (TextView) itemView.findViewById(R.id.league_list_expand_time_or_score);
-            matchStateTextView = (TextView) itemView.findViewById(R.id.league_list_expand_match_state);
+                timeOrScoreTextView = (TextView) itemView.findViewById(R.id.league_list_expand_time_or_score);
+                timeOrScoreTextView.setTextColor(Color.WHITE);
+                timeOrScoreTextView.setBackgroundColor(Color.parseColor("#EE4D6674"));
 
-            awayTeamNameTextView = (TextView) itemView.findViewById(R.id.league_list_expand_awayTeam_name);
-            awayTeamIconImageView = (ImageView) itemView.findViewById(R.id.league_list_expand_awayTeam_icon);
+                matchStateTextView = (TextView) itemView.findViewById(R.id.league_list_expand_match_state);
+
+                awayTeamNameTextView = (TextView) itemView.findViewById(R.id.league_list_expand_awayTeam_name);
+                awayTeamIconImageView = (ImageView) itemView.findViewById(R.id.league_list_expand_awayTeam_icon);
+            }
+            else {
+                testLayout = (MaterialRippleLayout) itemView.findViewById(R.id.league_list_ripple);
+
+                homeTeamNameTextView = (TextView) itemView.findViewById(R.id.league_list_expand_homeTeam_name);
+                homeTeamIconImageView = (ImageView) itemView.findViewById(R.id.league_list_expand_homeTeam_icon);
+
+                timeOrScoreTextView = (TextView) itemView.findViewById(R.id.league_list_expand_time_or_score);
+                matchStateTextView = (TextView) itemView.findViewById(R.id.league_list_expand_match_state);
+
+                awayTeamNameTextView = (TextView) itemView.findViewById(R.id.league_list_expand_awayTeam_name);
+                awayTeamIconImageView = (ImageView) itemView.findViewById(R.id.league_list_expand_awayTeam_icon);
+            }
+
+            itemType = viewType;
         }
     }
 

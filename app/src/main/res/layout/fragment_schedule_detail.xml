@@ -129,23 +129,8 @@
         android:layout_weight="7.5"
         android:orientation="vertical">
 
-        <com.pnikosis.materialishprogress.ProgressWheel
-            android:id="@+id/schedule_detail_progress_wheel"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_centerHorizontal="true"
-            android:layout_centerVertical="true"
-            wheel:matProg_barColor="#ff45a0ff"
-            wheel:matProg_progressIndeterminate="true"
-            wheel:matProg_spinSpeed="0.4"/>
-
-    <WebView
-        android:id="@+id/schedule_detail_web_view"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        >
-
-    </WebView>
+        <FrameLayout android:id="@+id/schedule_detail_container" android:layout_width="match_parent"
+            android:layout_height="match_parent" />
 
     </LinearLayout>
 </LinearLayout>

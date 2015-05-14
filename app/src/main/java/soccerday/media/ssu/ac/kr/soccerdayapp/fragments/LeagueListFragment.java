@@ -23,6 +23,7 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.MainActivity;
 import soccerday.media.ssu.ac.kr.soccerdayapp.R;
 import soccerday.media.ssu.ac.kr.soccerdayapp.parser.HighlightParserTask;
 import soccerday.media.ssu.ac.kr.soccerdayapp.parser.ScheduleParserTask;
+import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.HighlightList;
 import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.MatchListData;
 
 /**
@@ -36,6 +37,7 @@ public class LeagueListFragment extends Fragment {
 
     TextView noMatchTextView;
     List<LeagueListData> mLeagueListData;
+    List<LeagueListData> tempLeagueListData;
 
     private ProgressDialog taskProgressDia;
 
@@ -185,8 +187,8 @@ public class LeagueListFragment extends Fragment {
         @Override
         protected void onPostExecute(List<LeagueListData> leagueListData) {
 
-            updateLeagueList(leagueListData);
-
+            //updateLeagueList(leagueListData);
+            tempLeagueListData = leagueListData;
             isLoading = true;
 
             //new ScheduleHighlightTask().execute( date);
@@ -207,26 +209,30 @@ public class LeagueListFragment extends Fragment {
         }
 
         @Override
-        protected void onPostExecute(List<String> strings) {
+        protected void onPostExecute(List<HighlightList> highlightList) {
 
-            if(mLeagueListData != null) {
+            if(tempLeagueListData != null) {
 
-                for(LeagueListData leagueListData : mLeagueListData ) {
+                for(int i = 0; i < tempLeagueListData.size(); i++ ) {
 
-                    for(MatchListData matchListData : leagueListData.getExpandChildItemData()) {
-                        for(String teamName : strings) {
+                    //mLeagueListData.get(i).getTitle().equals()
+                    for(HighlightList hList : highlightList) {
 
-                            if(matchListData.getHomeTeamTitle().contains(teamName)) {
-                                matchListData.setHasHighlight(true);
+                        if(LeagueData.checkAlphabetAndNumberWord(tempLeagueListData.get(i).getTitle())
+                                .contains(LeagueData.checkAlphabetAndNumberWord(hList.getTitle()))) {
+
+                            int j = 0;
+                            for(MatchListData mData : tempLeagueListData.get(i).getExpandChildItemData()) {
+
+                                mData.setHasHighlight(hList.getHasHighlight().get(j));
+                                j++;
                             }
                         }
-
-
                     }
                 }
 
 
-                mRecyclerView.getAdapter().notifyDataSetChanged();
+                updateLeagueList(tempLeagueListData);
             }
 
             if(taskProgressDia != null) {

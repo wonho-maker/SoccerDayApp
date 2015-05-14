@@ -16,6 +16,8 @@ public class ParserData {
 
     private static String naverMobileSearchURL = "https://m.search.naver.com/search.naver?where=m&query=";
 
+    private static String naverScheduleAndResultMobileURL = "http://m.sports.naver.com/wfootball/schedule/index.nhn?category=wfootball&date=";
+
     private static String queryForSchedule = "해외축구일정";
 
     private static String scheduleDetailURL = "http://m.sports.naver.com/worldfootball/gamecenter/worldfootball/index.nhn?tab=cheer&gameId=";
@@ -52,6 +54,17 @@ public class ParserData {
         }
 
         return scheduleURL;
+    }
+
+    public static URL getScheduleAndResultMobileURL(String date) {
+        URL tempURL = null;
+        try {
+            tempURL = new URL(naverScheduleAndResultMobileURL +date );
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        return tempURL;
     }
 
     public static String getScheduleDetailURL(String leagueTitle, String matchId) {

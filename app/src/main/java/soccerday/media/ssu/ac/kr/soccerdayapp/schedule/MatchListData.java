@@ -27,7 +27,7 @@ public class MatchListData implements Serializable {
 
     public String matchId;
 
-    public boolean hasHighlight;
+    public boolean hasHighlight = false;
 
     public boolean hasHighlight() {
         return hasHighlight;

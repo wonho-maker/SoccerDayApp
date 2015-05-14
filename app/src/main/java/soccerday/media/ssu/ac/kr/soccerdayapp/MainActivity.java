@@ -20,7 +20,7 @@ import android.view.ViewGroup;
 import soccerday.media.ssu.ac.kr.soccerdayapp.drawer.NavigationDrawerFragment;
 import soccerday.media.ssu.ac.kr.soccerdayapp.fragments.LigeaueListAdapter;
 import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.MatchListData;
-import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.ScheduleDetailFragment;
+import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.detail.ScheduleDetailFragment;
 import soccerday.media.ssu.ac.kr.soccerdayapp.schedule.ScheduleFragment;
 
 

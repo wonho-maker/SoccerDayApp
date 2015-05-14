@@ -56,7 +56,7 @@
 
         android:layout_marginRight="15dp"
         android:gravity="center"
-        android:layout_gravity="center"
+
         android:text="01:30"/>
 
     <TextView

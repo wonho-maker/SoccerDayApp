@@ -302,7 +302,7 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
                     });
 
                     animator.start();
-                    tempRecyclerView.animate().alpha(1.0f).alphaBy(0.0f).start();
+                    //tempRecyclerView.animate().alpha(1.0f).alphaBy(0.0f).start();
 
 
                     hide = false;
@@ -332,7 +332,7 @@ public class LigeaueListAdapter extends RecyclerView.Adapter<LigeaueListAdapter.
 
                     animator.start();
                     tempRecyclerView.setVisibility(View.GONE);
-                    tempRecyclerView.animate().alpha(1.0f).alphaBy(0.0f).start();
+                    //tempRecyclerView.animate().alpha(1.0f).alphaBy(0.0f).start();
 
 
                     hide = true;

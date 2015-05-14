@@ -1,4 +1,4 @@
-package soccerday.media.ssu.ac.kr.soccerdayapp.schedule;
+package soccerday.media.ssu.ac.kr.soccerdayapp.schedule.detail;
 
 import android.app.Activity;
 import android.content.Context;
