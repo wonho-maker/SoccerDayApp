@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         android:layout_centerHorizontal="true"
         android:layout_centerVertical="true"
-        wheel:matProg_barColor="#ff45a0ff"
+        wheel:matProg_barColor="#009688"
         wheel:matProg_progressIndeterminate="true"
         wheel:matProg_spinSpeed="0.4"/>
 

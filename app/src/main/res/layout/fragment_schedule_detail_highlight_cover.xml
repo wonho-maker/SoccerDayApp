@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:wheel="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="4"
+    android:background="#ff222b33">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:textColor="#ff017665"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+
+        android:text="하이라이트"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical">
+
+        <com.pnikosis.materialishprogress.ProgressWheel
+            android:id="@+id/schedule_detail_highlight_cover_progress_wheel"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            wheel:matProg_barColor="#009688"
+            wheel:matProg_progressIndeterminate="true"
+            wheel:matProg_spinSpeed="0.4"
+            />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="하이라이트 영상이 아직 없습니다."
+            android:textColor="#ffffff"
+            android:gravity="center"
+            android:visibility="gone"/>
+
+        <WebView
+            android:id="@+id/schedule_detail_highlight_cover_webView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            ></WebView>
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#ff162029"
+        android:orientation="vertical"
+        android:layout_weight="1">
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+
+                android:textColor="#ff017665"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="스코어 확인"/>
+
+            <Button
+                android:id="@+id/schedule_detail_highlight_cover_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="확인"/>
+        </LinearLayout>
+</LinearLayout>

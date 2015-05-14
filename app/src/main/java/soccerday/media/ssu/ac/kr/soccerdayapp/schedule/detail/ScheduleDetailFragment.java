@@ -105,10 +105,18 @@ public class ScheduleDetailFragment extends Fragment {
         ((TextView)v.findViewById(R.id.schedule_detail_away_title)).setText(matchData.getAwayTeamTitle());
 
         FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.beginTransaction()
-               .replace(R.id.schedule_detail_container, ScheduleDetailInfoFragment.newInstance(ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.getMatchId())))
-               .commit();
+        if(matchData.hasHighlight()) {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.schedule_detail_container,
+                            ScheduleDetailCoverFragment.newInstance(ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.getMatchId())))
+                    .commit();
 
+        } else {
+            fragmentManager.beginTransaction()
+                    .replace(R.id.schedule_detail_container,
+                            ScheduleDetailInfoFragment.newInstance(ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.getMatchId())))
+                    .commit();
+        }
 
 
 
