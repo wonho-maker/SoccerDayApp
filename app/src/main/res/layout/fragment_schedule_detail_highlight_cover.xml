@@ -31,15 +31,17 @@
             wheel:matProg_barColor="#009688"
             wheel:matProg_progressIndeterminate="true"
             wheel:matProg_spinSpeed="0.4"
+
             />
 
         <TextView
+            android:id="@+id/schedule_detail_highlight_cover_noUpload"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:text="하이라이트 영상이 아직 없습니다."
+            android:text="하이라이트 영상이 업로드 되지 않았습니다.\n 잠시 후 이용해 주세요."
             android:textColor="#ffffff"
             android:gravity="center"
-            android:visibility="gone"/>
+            />
 
         <WebView
             android:id="@+id/schedule_detail_highlight_cover_webView"
@@ -54,13 +56,14 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:background="#ff162029"
-        android:orientation="vertical"
-        android:layout_weight="1">
+        android:orientation="horizontal"
+        android:layout_weight="1"
+        android:weightSum="10">
             <TextView
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:paddingLeft="16dp"
-
+                android:layout_weight="9"
                 android:textColor="#ff017665"
                 android:textAppearance="?android:attr/textAppearanceMedium"
                 android:text="스코어 확인"/>
@@ -69,6 +72,8 @@
                 android:id="@+id/schedule_detail_highlight_cover_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginRight="16dp"
+                android:layout_weight="1"
                 android:text="확인"/>
         </LinearLayout>
 </LinearLayout>

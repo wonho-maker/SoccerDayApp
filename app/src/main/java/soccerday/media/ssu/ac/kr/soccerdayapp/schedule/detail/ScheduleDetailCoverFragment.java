@@ -16,6 +16,8 @@ import android.webkit.JavascriptInterface;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.TextView;
 
 import com.pnikosis.materialishprogress.ProgressWheel;
 
@@ -27,14 +29,19 @@ import soccerday.media.ssu.ac.kr.soccerdayapp.R;
 /**
  * Created by wonho on 2015-05-15.
  */
-public class ScheduleDetailCoverFragment extends Fragment {
+public class ScheduleDetailCoverFragment extends Fragment implements View.OnClickListener {
 
     ProgressWheel progressWheel;
+    TextView noUploadTextView;
     WebView webView;
 
     CustomChromeClient customChromeClient;
 
     String loadURL;
+
+    Button scoreButton;
+
+    boolean hasHighlightVOD = false;
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -43,8 +50,10 @@ public class ScheduleDetailCoverFragment extends Fragment {
 
         progressWheel = (ProgressWheel) v.findViewById(R.id.schedule_detail_highlight_cover_progress_wheel);
 
+        noUploadTextView = (TextView) v.findViewById(R.id.schedule_detail_highlight_cover_noUpload);
 
-
+        scoreButton = (Button) v.findViewById(R.id.schedule_detail_highlight_cover_button);
+        scoreButton.setOnClickListener(this);
         webView = ((WebView)v.findViewById(R.id.schedule_detail_highlight_cover_webView));
         webView.getSettings().setJavaScriptEnabled(true);
         webView.getSettings().setPluginState(WebSettings.PluginState.ON);
@@ -79,13 +88,28 @@ public class ScheduleDetailCoverFragment extends Fragment {
             public void onPageFinished(WebView view, String url) {
                 super.onPageFinished(view, url);
 
-                view.loadUrl("javascript:(function() { " +
-                        "document.getElementsByClassName('end_head')[0].style.display = 'none'; " +
-                        "document.getElementsByClassName('mtch_bx_wrp')[0].style.display = 'none'; " +
-                        "document.getElementsByClassName('gs_wrp typ4')[0].style.display = 'none'; " +
-                        "})()");
+                if(!hasHighlightVOD) {
 
-                view.loadUrl("javascript: window.CallAndroidFunction.setVisible(document.getElementsByClassName('gs_wrp typ4')[0])");
+                    view.loadUrl("javascript:(function() { " +
+                            "var test = document.getElementsByClassName('hl')[0]; " +
+                            "var test2 = test.getElementsByTagName('a')[0];" +
+                            "var test3 = test2.getAttribute('href');" +
+                            "var test4 = test.getElementsByTagName('em')[0].innerHTML;" +
+                            "window.CallAndroidFunction.checkHighlight(test3, test4);" +
+                            "})()");
+
+                } else {
+
+                    view.loadUrl("javascript:(function() { " +
+                            "document.getElementsByClassName('end_head')[0].style.display = 'none'; " +
+                            "document.getElementsByClassName('info_wrp')[0].style.display = 'none'; " +
+                            "document.getElementById('view').style.display = 'none';"+
+                            "document.getElementById('comment_module').style.display = 'none';"+
+                            "})()");
+
+                    view.loadUrl("javascript: window.CallAndroidFunction.setVisible()");
+                }
+                //view.loadUrl("javascript: ");
             }
 
             @Override
@@ -111,23 +135,54 @@ public class ScheduleDetailCoverFragment extends Fragment {
         };
     }
 
+    @Override
+    public void onClick(View v) {
+        
+    }
+
     public class myJavaScriptInterface {
         Handler mHandler = new Handler();
         @JavascriptInterface
-        public void setVisible(final Object test ){
-            mHandler.post(new Runnable() {
+        public void checkHighlight(final String test, final String test2){
+
+            mHandler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+
+                    if(test2.trim().equals("하이라이트")) {
+                        if (progressWheel != null) {
+                            Log.i("test", test + ", "+test2);
+                            progressWheel.setVisibility(View.GONE);
+                            noUploadTextView.setVisibility(View.GONE);
+
+                            hasHighlightVOD = true;
+
+                            webView.loadUrl(test);
+                        }
+                    } else {
+                        progressWheel.setVisibility(View.GONE);
+                    }
+
+
+                }
+            }, 400);
+        }
+
+
+        @JavascriptInterface
+        public void setVisible(){
+            mHandler.postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
                     if(progressWheel != null) {
-                        Log.i("test", test.toString());
                         progressWheel.setVisibility(View.GONE);
+                        noUploadTextView.setVisibility(View.GONE);
                     }
                 }
-            });
+            }, 400);
         }
-
-
 
     }
 

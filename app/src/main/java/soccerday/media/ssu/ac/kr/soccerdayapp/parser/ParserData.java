@@ -20,9 +20,13 @@ public class ParserData {
 
     private static String queryForSchedule = "해외축구일정";
 
-    private static String scheduleDetailURL = "http://m.sports.naver.com/worldfootball/gamecenter/worldfootball/index.nhn?tab=cheer&gameId=";
+    private static String scheduleDetailURL = "http://m.sports.naver.com/worldfootball/gamecenter/worldfootball/index.nhn?gameId=";
 
     private static URL scheduleURL;
+
+    public static int TAB_COMMENT = 0;
+    public static int TAB_VOD = 1;
+
 
     public static String getNaverSearchURL() {
         return naverSearchURL;
@@ -67,7 +71,7 @@ public class ParserData {
         return tempURL;
     }
 
-    public static String getScheduleDetailURL(String leagueTitle, String matchId) {
+    public static String getScheduleDetailURL(String leagueTitle, String matchId, int tab) {
 
         String detailURL = scheduleDetailURL + matchId;
 
@@ -105,6 +109,12 @@ public class ParserData {
         }
         else {
 
+        }
+
+        if(tab == TAB_COMMENT) {
+            detailURL += "&tab=cheer";
+        } else if(tab == TAB_VOD) {
+            detailURL += "&tab=vod";
         }
 
         return detailURL;

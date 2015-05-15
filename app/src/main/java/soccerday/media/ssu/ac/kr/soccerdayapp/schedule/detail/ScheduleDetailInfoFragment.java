@@ -133,7 +133,7 @@ public class ScheduleDetailInfoFragment extends Fragment {
         Handler mHandler = new Handler();
         @JavascriptInterface
         public void setVisible(){
-            mHandler.post(new Runnable() {
+            mHandler.postDelayed(new Runnable() {
 
                 @Override
                 public void run() {
@@ -141,7 +141,7 @@ public class ScheduleDetailInfoFragment extends Fragment {
                         progressWheel.setVisibility(View.GONE);
                     }
                 }
-            });
+            }, 400);
         }
 
 

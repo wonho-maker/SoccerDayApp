@@ -108,13 +108,13 @@ public class ScheduleDetailFragment extends Fragment {
         if(matchData.hasHighlight()) {
             fragmentManager.beginTransaction()
                     .replace(R.id.schedule_detail_container,
-                            ScheduleDetailCoverFragment.newInstance(ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.getMatchId())))
+                            ScheduleDetailCoverFragment.newInstance(ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.getMatchId(), ParserData.TAB_VOD)))
                     .commit();
 
         } else {
             fragmentManager.beginTransaction()
                     .replace(R.id.schedule_detail_container,
-                            ScheduleDetailInfoFragment.newInstance(ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.getMatchId())))
+                            ScheduleDetailInfoFragment.newInstance(ParserData.getScheduleDetailURL(matchData.getLeague(), matchData.getMatchId(), ParserData.TAB_COMMENT)))
                     .commit();
         }
 
